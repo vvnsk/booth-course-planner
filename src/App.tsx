@@ -28,6 +28,9 @@ import { FLMBEPanel } from './components/FLMBEPanel';
 import { ConcentrationsPanel } from './components/ConcentrationsPanel';
 import { Navbar } from './components/Navbar';
 
+// Test utilities (for development)
+import './utils/evaluationTestUtils';
+
 // Main App component that uses the context
 const AppContent: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);

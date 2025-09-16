@@ -1,8 +1,23 @@
-import React, { useState } from 'react';
-import { Card, Text, Badge, Group, ActionIcon, Stack, Modal, Title, Divider } from '@mantine/core';
-import { IconTrash, IconGripVertical, IconPlus, IconInfoCircle } from '@tabler/icons-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Card, 
+  Text, 
+  Badge, 
+  Group, 
+  ActionIcon, 
+  Stack, 
+  Modal, 
+  Title, 
+  Divider, 
+  Table, 
+  ScrollArea,
+  Loader,
+  Alert
+} from '@mantine/core';
+import { IconTrash, IconGripVertical, IconPlus, IconInfoCircle, IconAlertCircle } from '@tabler/icons-react';
 import { useMediaQuery, useDisclosure } from '@mantine/hooks';
-import type { CourseCardProps } from '../types/index';
+import type { CourseCardProps, CourseEvaluationSummary } from '../types/index';
+import { loadCourseEvaluations, getCourseEvaluationSummary } from '../utils/evaluationHelpers';
 
 // Helper function to aggregate quarters and show typical offering patterns
 const getQuarterBadges = (quartersOffered: string[]): string[] => {
@@ -58,6 +73,20 @@ const getQuarterColor = (quarter: string): string => {
   }
 };
 
+// Helper function to get color for ratings
+const getRatingColor = (rating: number): string => {
+  if (rating >= 4.5) return 'green';
+  if (rating >= 4.0) return 'teal';
+  if (rating >= 3.5) return 'blue';
+  if (rating >= 3.0) return 'yellow';
+  return 'red';
+};
+
+// Helper function to format rating display
+const formatRating = (rating: number): string => {
+  return rating > 0 ? rating.toFixed(1) : 'N/A';
+};
+
 export const CourseCard: React.FC<CourseCardProps> = ({
   course,
   onRemove,
@@ -67,7 +96,33 @@ export const CourseCard: React.FC<CourseCardProps> = ({
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
+  const [evaluationData, setEvaluationData] = useState<CourseEvaluationSummary | null>(null);
+  const [isLoadingEvaluations, setIsLoadingEvaluations] = useState(false);
+  const [evaluationError, setEvaluationError] = useState<string | null>(null);
   const isMobile = useMediaQuery('(max-width: 768px)');
+
+  // Load evaluation data when modal is opened
+  useEffect(() => {
+    if (opened && !evaluationData && !isLoadingEvaluations) {
+      loadEvaluationData();
+    }
+  }, [opened]);
+
+  const loadEvaluationData = async () => {
+    setIsLoadingEvaluations(true);
+    setEvaluationError(null);
+    
+    try {
+      const evaluations = await loadCourseEvaluations();
+      const summary = getCourseEvaluationSummary(course.code, evaluations);
+      setEvaluationData(summary);
+    } catch (error) {
+      console.error('Failed to load evaluation data:', error);
+      setEvaluationError('Failed to load course evaluation data');
+    } finally {
+      setIsLoadingEvaluations(false);
+    }
+  };
 
   const handleDragStart = (e: React.DragEvent) => {
     if (!isDraggable) return;
@@ -203,7 +258,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
         opened={opened}
         onClose={close}
         title={<Title order={3}>{course.code}</Title>}
-        size="md"
+        size="calc(90vw)"
         centered
         overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
         styles={{
@@ -216,7 +271,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({
             overflow: 'auto'
           },
           content: {
-            position: 'relative'
+            position: 'relative',
+            maxWidth: '1400px'
           }
         }}
       >
@@ -271,6 +327,144 @@ export const CourseCard: React.FC<CourseCardProps> = ({
               </Text>
             </div>
           )}
+
+          {/* Course Evaluation Section */}
+          <Divider />
+          <div>
+            <Title order={5} mb="md">Course Evaluations</Title>
+            
+            {isLoadingEvaluations && (
+              <Group>
+                <Loader size="sm" />
+                <Text size="sm" c="dimmed">Loading evaluation data...</Text>
+              </Group>
+            )}
+            
+            {evaluationError && (
+              <Alert icon={<IconAlertCircle size={16} />} color="red" mb="md">
+                {evaluationError}
+              </Alert>
+            )}
+            
+            {evaluationData && !isLoadingEvaluations && (
+              <>
+                {evaluationData.professors.length > 0 ? (
+                  <>
+                    {/* Aggregate Ratings Summary */}
+                    <div style={{ marginBottom: '1rem' }}>
+                      <Text fw={500} mb="xs">Overall Course Ratings:</Text>
+                      <Group gap="md">
+                        <Badge color={getRatingColor(evaluationData.aggregateRatings.overall)} variant="filled">
+                          Overall: {formatRating(evaluationData.aggregateRatings.overall)}
+                        </Badge>
+                        <Badge color={getRatingColor(evaluationData.aggregateRatings.recommendation)} variant="filled">
+                          Recommend: {formatRating(evaluationData.aggregateRatings.recommendation)}
+                        </Badge>
+                        <Badge color="gray" variant="filled">
+                          Hours/Week: {formatRating(evaluationData.aggregateRatings.hoursPerWeek)}
+                        </Badge>
+                      </Group>
+                    </div>
+
+                    {/* Professor Evaluations Table */}
+                    <ScrollArea>
+                      <Table striped highlightOnHover withTableBorder>
+                        <Table.Thead>
+                          <Table.Tr>
+                            <Table.Th>Professor</Table.Th>
+                            <Table.Th>Schedule</Table.Th>
+                            <Table.Th>Quarter</Table.Th>
+                            <Table.Th>Overall</Table.Th>
+                            <Table.Th>Recommend</Table.Th>
+                            <Table.Th>Clarity</Table.Th>
+                            <Table.Th>Interest</Table.Th>
+                            <Table.Th>Useful</Table.Th>
+                            <Table.Th>Hrs/Week</Table.Th>
+                            <Table.Th>Response Rate</Table.Th>
+                          </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody>
+                          {evaluationData.professors.map((professor, index) => (
+                            <Table.Tr key={index}>
+                              <Table.Td>
+                                <Text size="sm" fw={500}>
+                                  {professor.fullName}
+                                </Text>
+                              </Table.Td>
+                              <Table.Td>
+                                <Badge size="sm" variant="light">
+                                  {professor.schedule}
+                                </Badge>
+                              </Table.Td>
+                              <Table.Td>
+                                <Text size="sm">
+                                  {professor.quarter}
+                                </Text>
+                              </Table.Td>
+                              <Table.Td>
+                                <Badge 
+                                  size="sm" 
+                                  color={getRatingColor(professor.ratings.overall)}
+                                  variant="filled"
+                                >
+                                  {formatRating(professor.ratings.overall)}
+                                </Badge>
+                              </Table.Td>
+                              <Table.Td>
+                                <Badge 
+                                  size="sm" 
+                                  color={getRatingColor(professor.ratings.recommendation)}
+                                  variant="filled"
+                                >
+                                  {formatRating(professor.ratings.recommendation)}
+                                </Badge>
+                              </Table.Td>
+                              <Table.Td>
+                                <Text size="sm">
+                                  {formatRating(professor.ratings.clarity)}
+                                </Text>
+                              </Table.Td>
+                              <Table.Td>
+                                <Text size="sm">
+                                  {formatRating(professor.ratings.interest)}
+                                </Text>
+                              </Table.Td>
+                              <Table.Td>
+                                <Text size="sm">
+                                  {formatRating(professor.ratings.usefulness)}
+                                </Text>
+                              </Table.Td>
+                              <Table.Td>
+                                <Text size="sm">
+                                  {formatRating(professor.ratings.hoursPerWeek)}
+                                </Text>
+                              </Table.Td>
+                              <Table.Td>
+                                <Text size="xs" c="dimmed">
+                                  {professor.responseInfo.responded}/{professor.responseInfo.invited}
+                                  {professor.responseInfo.responseRatio > 0 && 
+                                    ` (${professor.responseInfo.responseRatio.toFixed(0)}%)`
+                                  }
+                                </Text>
+                              </Table.Td>
+                            </Table.Tr>
+                          ))}
+                        </Table.Tbody>
+                      </Table>
+                    </ScrollArea>
+
+                    <Text size="xs" c="dimmed" mt="md">
+                      * Ratings are on a 1-5 scale. Response rate shows students who responded out of those invited.
+                    </Text>
+                  </>
+                ) : (
+                  <Text c="dimmed" size="sm">
+                    No evaluation data available for this course.
+                  </Text>
+                )}
+              </>
+            )}
+          </div>
         </Stack>
       </Modal>
     </Card>

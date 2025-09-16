@@ -1,10 +1,63 @@
 // Course and Academic Data Types
+export interface CourseEvaluation {
+  courseName: string;
+  courseTitle: string;
+  firstName: string;
+  lastName: string;
+  term: string;
+  invitedCount: number;
+  respondentCount: number;
+  responseRatio: number;
+  hoursPerWeek: number;
+  clarityRating: number;
+  interestRating: number;
+  usefulnessRating: number;
+  overallRating: number;
+  recommendationRating: number;
+}
+
+export interface ProfessorOffering {
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  schedule: string; // e.g., "85", "81", "01"
+  quarter: string; // e.g., "Autumn 2020"
+  ratings: {
+    clarity: number;
+    interest: number;
+    usefulness: number;
+    overall: number;
+    recommendation: number;
+    hoursPerWeek: number;
+  };
+  responseInfo: {
+    invited: number;
+    responded: number;
+    responseRatio: number;
+  };
+}
+
+export interface CourseEvaluationSummary {
+  courseCode: string;
+  professors: ProfessorOffering[];
+  aggregateRatings: {
+    clarity: number;
+    interest: number;
+    usefulness: number;
+    overall: number;
+    recommendation: number;
+    hoursPerWeek: number;
+  };
+}
+
 export interface Course {
   code: string;
   title: string;
   units: number;
   prerequisites?: string[];
   quartersOffered?: string[];
+  description?: string;
+  evaluationData?: CourseEvaluationSummary;
 }
 
 export interface Quarter {
