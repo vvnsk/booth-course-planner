@@ -90,12 +90,19 @@ export const PlannerProvider: React.FC<PlannerProviderProps> = ({ children }) =>
           console.log(`Removed ${courses.length - uniqueCourses.length} duplicate courses from source data`);
         }
         
+        // Initialize requirements using already-loaded JSON data
+        const [foundationReqs, flmbeReqs, concentrationReqs] = await Promise.all([
+          initializeFoundationRequirements(degreeData),
+          initializeFLMBERequirements(degreeData),
+          initializeConcentrations(concentrationsDataLoaded)
+        ]);
+        
         // Set the data
         setAvailableCourses(uniqueCourses);
         setQuarters(createDefaultQuarters());
-        setFoundationRequirements(initializeFoundationRequirements());
-        setFlmbeRequirements(initializeFLMBERequirements());
-        setConcentrations(initializeConcentrations());
+        setFoundationRequirements(foundationReqs);
+        setFlmbeRequirements(flmbeReqs);
+        setConcentrations(concentrationReqs);
         setDegreeRequirements(degreeData);
         setConcentrationsData(concentrationsDataLoaded);
         
