@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Card, Text, Badge, Group, ActionIcon, Stack, Rating } from '@mantine/core';
-import { IconTrash, IconGripVertical } from '@tabler/icons-react';
+import { IconTrash, IconGripVertical, IconPlus } from '@tabler/icons-react';
 import type { CourseCardProps } from '../types/index';
 
 export const CourseCard: React.FC<CourseCardProps> = ({
   course,
   onRemove,
+  onAdd,
   isDraggable = true,
   showDetails = true
 }) => {
@@ -90,16 +91,29 @@ export const CourseCard: React.FC<CourseCardProps> = ({
           )}
         </Stack>
         
-        {onRemove && (
-          <ActionIcon
-            variant="subtle"
-            color="red"
-            size="sm"
-            onClick={onRemove}
-          >
-            <IconTrash size={16} />
-          </ActionIcon>
-        )}
+        <Stack gap="xs">
+          {onAdd && (
+            <ActionIcon
+              variant="subtle"
+              color="green"
+              size="sm"
+              onClick={onAdd}
+            >
+              <IconPlus size={16} />
+            </ActionIcon>
+          )}
+          
+          {onRemove && (
+            <ActionIcon
+              variant="subtle"
+              color="red"
+              size="sm"
+              onClick={onRemove}
+            >
+              <IconTrash size={16} />
+            </ActionIcon>
+          )}
+        </Stack>
       </Group>
     </Card>
   );

@@ -76,6 +76,7 @@ export interface ProgressSummary {
 export interface CourseCardProps {
   course: Course;
   onRemove?: () => void;
+  onAdd?: () => void;
   isDraggable?: boolean;
   showDetails?: boolean;
 }

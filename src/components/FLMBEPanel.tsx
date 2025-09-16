@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Paper, Text, Stack, Group, Progress, SimpleGrid, Badge, Tooltip, ActionIcon, Collapse } from '@mantine/core';
 import { IconCheck, IconCircle, IconCircleCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import { usePlanner } from '../contexts/PlannerContext';
 import type { FLMBEArea } from '../types/index';
 
 interface FLMBEBoxProps {
   area: FLMBEArea;
-  onCourseSelect?: (line: string, courseCode: string) => void;
 }
 
-const FLMBEBox: React.FC<FLMBEBoxProps> = ({ area, onCourseSelect }) => {
+const FLMBEBox: React.FC<FLMBEBoxProps> = ({ area }) => {
+  const { selectFLMBECourse } = usePlanner();
   const allEligibleCourses = [...area.basicCourses, ...area.approvedSubstitutes];
   
   const getGroupColor = (group: string) => {
@@ -97,15 +98,8 @@ const FLMBEBox: React.FC<FLMBEBoxProps> = ({ area, onCourseSelect }) => {
   );
 };
 
-interface FLMBEPanelProps {
-  flmbeRequirements: FLMBEArea[];
-  onCourseSelect?: (line: string, courseCode: string) => void;
-}
-
-export const FLMBEPanel: React.FC<FLMBEPanelProps> = ({
-  flmbeRequirements,
-  onCourseSelect
-}) => {
+export const FLMBEPanel: React.FC = () => {
+  const { flmbeRequirements } = usePlanner();
   const [isExpanded, setIsExpanded] = useState(true);
   const completedCount = flmbeRequirements.filter(req => req.completed).length;
   const requiredCount = 7; // Need 7 out of 8 areas
@@ -163,7 +157,6 @@ export const FLMBEPanel: React.FC<FLMBEPanelProps> = ({
                   <FLMBEBox
                     key={area.line}
                     area={area}
-                    onCourseSelect={onCourseSelect}
                   />
                 ))}
               </SimpleGrid>
@@ -179,7 +172,6 @@ export const FLMBEPanel: React.FC<FLMBEPanelProps> = ({
                   <FLMBEBox
                     key={area.line}
                     area={area}
-                    onCourseSelect={onCourseSelect}
                   />
                 ))}
               </SimpleGrid>
@@ -195,7 +187,6 @@ export const FLMBEPanel: React.FC<FLMBEPanelProps> = ({
                   <FLMBEBox
                     key={area.line}
                     area={area}
-                    onCourseSelect={onCourseSelect}
                   />
                 ))}
               </SimpleGrid>

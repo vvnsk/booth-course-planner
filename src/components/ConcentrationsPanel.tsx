@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { Paper, Text, Stack, Group, Progress, Badge, SimpleGrid, Accordion, Tooltip, ActionIcon, Collapse } from '@mantine/core';
 import { IconCheck, IconTarget, IconCircle, IconCircleCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import { usePlanner } from '../contexts/PlannerContext';
 import type { Concentration, ConcentrationRequirement } from '../types/index';
 
 interface ConcentrationRequirementBoxProps {
   requirement: ConcentrationRequirement;
   concentrationName: string;
-  onCourseAdd?: (concentrationName: string, requirementName: string, courseCode: string) => void;
 }
 
 const ConcentrationRequirementBox: React.FC<ConcentrationRequirementBoxProps> = ({
   requirement,
-  concentrationName,
-  onCourseAdd
+  concentrationName
 }) => {
+  const { addConcentrationCourse } = usePlanner();
   const progressPercent = Math.min((requirement.unitsCompleted / requirement.minUnits) * 100, 100);
   const isCompleted = requirement.unitsCompleted >= requirement.minUnits;
   
@@ -109,16 +109,13 @@ const ConcentrationRequirementBox: React.FC<ConcentrationRequirementBoxProps> = 
 interface ConcentrationCardProps {
   concentration: Concentration;
   isSelected: boolean;
-  onToggleSelection: (name: string) => void;
-  onCourseAdd?: (concentrationName: string, requirementName: string, courseCode: string) => void;
 }
 
 const ConcentrationCard: React.FC<ConcentrationCardProps> = ({
   concentration,
-  isSelected,
-  onToggleSelection,
-  onCourseAdd
+  isSelected
 }) => {
+  const { toggleConcentration } = usePlanner();
   const progressPercent = Math.min((concentration.totalUnitsCompleted / concentration.totalUnitsRequired) * 100, 100);
   
   return (
@@ -131,7 +128,7 @@ const ConcentrationCard: React.FC<ConcentrationCardProps> = ({
         borderColor: isSelected ? '#2196f3' : '#dee2e6',
         cursor: 'pointer'
       }}
-      onClick={() => onToggleSelection(concentration.name)}
+      onClick={() => toggleConcentration(concentration.name)}
     >
       <Stack gap="sm">
         <Group justify="space-between" align="center">
@@ -166,7 +163,6 @@ const ConcentrationCard: React.FC<ConcentrationCardProps> = ({
                 key={idx}
                 requirement={requirement}
                 concentrationName={concentration.name}
-                onCourseAdd={onCourseAdd}
               />
             ))}
           </Stack>
@@ -176,19 +172,8 @@ const ConcentrationCard: React.FC<ConcentrationCardProps> = ({
   );
 };
 
-interface ConcentrationsPanelProps {
-  concentrations: Concentration[];
-  selectedConcentrations: string[];
-  onToggleConcentration: (name: string) => void;
-  onCourseAdd?: (concentrationName: string, requirementName: string, courseCode: string) => void;
-}
-
-export const ConcentrationsPanel: React.FC<ConcentrationsPanelProps> = ({
-  concentrations,
-  selectedConcentrations,
-  onToggleConcentration,
-  onCourseAdd
-}) => {
+export const ConcentrationsPanel: React.FC = () => {
+  const { concentrations, selectedConcentrations } = usePlanner();
   const [isExpanded, setIsExpanded] = useState(true);
   const selectedConcentrationObjects = concentrations.filter(c => 
     selectedConcentrations.includes(c.name)
@@ -242,8 +227,6 @@ export const ConcentrationsPanel: React.FC<ConcentrationsPanelProps> = ({
                         key={concentration.name}
                         concentration={concentration}
                         isSelected={selectedConcentrations.includes(concentration.name)}
-                        onToggleSelection={onToggleConcentration}
-                        onCourseAdd={onCourseAdd}
                       />
                     ))}
                   </SimpleGrid>
@@ -262,8 +245,6 @@ export const ConcentrationsPanel: React.FC<ConcentrationsPanelProps> = ({
                           key={concentration.name}
                           concentration={concentration}
                           isSelected={true}
-                          onToggleSelection={onToggleConcentration}
-                          onCourseAdd={onCourseAdd}
                         />
                       ))}
                     </Stack>

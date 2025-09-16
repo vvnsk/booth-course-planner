@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Paper, Text, Stack, Group, Progress, Tooltip, ActionIcon, Collapse } from '@mantine/core';
 import { IconCheck, IconCircle, IconCircleCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import { usePlanner } from '../contexts/PlannerContext';
 import type { FoundationRequirement } from '../types/index';
 
 interface RequirementBoxProps {
   requirement: FoundationRequirement;
-  onCourseSelect?: (area: string, courseCode: string) => void;
 }
 
-const RequirementBox: React.FC<RequirementBoxProps> = ({ requirement, onCourseSelect }) => {
+const RequirementBox: React.FC<RequirementBoxProps> = ({ requirement }) => {
+  const { selectFoundationCourse } = usePlanner();
   const allEligibleCourses = [...requirement.basicCourses, ...requirement.approvedSubstitutes];
   
   const tooltipContent = (
@@ -81,15 +82,8 @@ const RequirementBox: React.FC<RequirementBoxProps> = ({ requirement, onCourseSe
   );
 };
 
-interface DegreeRequirementsPanelProps {
-  foundationRequirements: FoundationRequirement[];
-  onCourseSelect?: (area: string, courseCode: string) => void;
-}
-
-export const DegreeRequirementsPanel: React.FC<DegreeRequirementsPanelProps> = ({
-  foundationRequirements,
-  onCourseSelect
-}) => {
+export const DegreeRequirementsPanel: React.FC = () => {
+  const { foundationRequirements } = usePlanner();
   const [isExpanded, setIsExpanded] = useState(true);
   const completedCount = foundationRequirements.filter(req => req.completed).length;
   const totalCount = foundationRequirements.length;
@@ -141,7 +135,6 @@ export const DegreeRequirementsPanel: React.FC<DegreeRequirementsPanelProps> = (
                 <RequirementBox
                   key={requirement.area}
                   requirement={requirement}
-                  onCourseSelect={onCourseSelect}
                 />
               ))}
             </Group>
