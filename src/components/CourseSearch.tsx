@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Paper, TextInput, Stack, ScrollArea, Group, Badge, ActionIcon, Divider, Text } from '@mantine/core';
-import { IconSearch, IconPlus, IconFilter } from '@tabler/icons-react';
+import { IconSearch, IconFilter } from '@tabler/icons-react';
 import { CourseCard } from './CourseCard';
 import type { Course } from '../types/index';
 
@@ -295,24 +295,13 @@ export const CourseSearch: React.FC<CourseSearchProps> = ({
               </Text>
             ) : (
               filteredCourses.map((course) => (
-                <Group key={course.code} gap="xs" align="stretch" wrap="nowrap" style={{ minWidth: '300px' }}>
-                  <div style={{ flex: 1, minWidth: '250px' }}>
-                    <CourseCard
-                      course={course}
-                      isDraggable={true}
-                      showDetails={true}
-                    />
-                  </div>
-                  <ActionIcon
-                    variant="light"
-                    color="green"
-                    size="lg"
-                    onClick={() => onAddCourse(course)}
-                    style={{ alignSelf: 'center' }}
-                  >
-                    <IconPlus size={18} />
-                  </ActionIcon>
-                </Group>
+                <div key={course.code} style={{ minWidth: '250px' }}>
+                  <CourseCard
+                    course={course}
+                    isDraggable={true}
+                    showDetails={true}
+                  />
+                </div>
               ))
             )}
           </Group>

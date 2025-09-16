@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Text, Badge, Group, ActionIcon, Stack, Rating } from '@mantine/core';
 import { IconTrash, IconGripVertical } from '@tabler/icons-react';
 import type { CourseCardProps } from '../types/index';
@@ -9,15 +9,35 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   isDraggable = true,
   showDetails = true
 }) => {
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragStart = (e: React.DragEvent) => {
+    if (!isDraggable) return;
+    
+    // Store course data for the drop handler
+    e.dataTransfer.setData('application/json', JSON.stringify(course));
+    e.dataTransfer.effectAllowed = 'copy';
+    setIsDragging(true);
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
+
   return (
     <Card
       shadow="sm"
       padding="xs"
       radius="md"
       withBorder
+      draggable={isDraggable}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
       style={{
-        cursor: isDraggable ? 'grab' : 'default',
-        minHeight: '80px'
+        cursor: isDraggable ? (isDragging ? 'grabbing' : 'grab') : 'default',
+        minHeight: '80px',
+        opacity: isDragging ? 0.5 : 1,
+        transition: 'opacity 0.2s ease'
       }}
     >
       <Group justify="space-between" align="flex-start" gap="xs">

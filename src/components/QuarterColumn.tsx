@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Paper, Text, Stack, Group, Badge, ActionIcon, ScrollArea } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { CourseCard } from './CourseCard';
@@ -10,7 +10,36 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
   onRemoveCourse,
   onDropCourse
 }) => {
+  const [isDropZoneActive, setIsDropZoneActive] = useState(false);
   const totalUnits = quarter.courses.reduce((sum, course) => sum + (course.units || 100), 0);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    setIsDropZoneActive(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    // Only set to false if we're leaving the entire quarter column
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsDropZoneActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDropZoneActive(false);
+    
+    try {
+      const courseData = e.dataTransfer.getData('application/json');
+      if (courseData) {
+        const course = JSON.parse(courseData);
+        onDropCourse(course);
+      }
+    } catch (error) {
+      console.error('Error parsing dropped course data:', error);
+    }
+  };
   
   return (
     <Paper
@@ -18,10 +47,15 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
       radius="md"
       p="md"
       withBorder
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
       style={{
         minHeight: '150px',
         width: '100%',
-        backgroundColor: '#f8f9fa'
+        backgroundColor: isDropZoneActive ? '#e3f2fd' : '#f8f9fa',
+        border: isDropZoneActive ? '2px solid #2196f3' : '1px solid #dee2e6',
+        transition: 'all 0.2s ease'
       }}
     >
       <Stack gap="sm">
@@ -61,17 +95,22 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
               p="lg"
               radius="md"
               style={{
-                border: '2px dashed #ced4da',
-                backgroundColor: 'white',
+                border: isDropZoneActive ? '2px solid #2196f3' : '2px dashed #ced4da',
+                backgroundColor: isDropZoneActive ? '#e3f2fd' : 'white',
                 textAlign: 'center',
                 minHeight: '80px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                transition: 'all 0.2s ease'
               }}
             >
-              <Text size="sm" c="dimmed">
-                Drop courses here or click + to add
+              <Text 
+                size="sm" 
+                c={isDropZoneActive ? 'blue' : 'dimmed'}
+                fw={isDropZoneActive ? 600 : 400}
+              >
+                {isDropZoneActive ? 'Drop course here' : 'Drop courses here or click + to add'}
               </Text>
             </Paper>
           ) : (
