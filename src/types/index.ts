@@ -62,6 +62,13 @@ export interface PlannerState {
   selectedConcentrations: string[];
 }
 
+// Export/Import Types
+export interface ExportablePlannerData {
+  version: string;
+  exportDate: string;
+  quarters: Quarter[];
+}
+
 // Progress Tracking
 export interface ProgressSummary {
   foundationsComplete: number;

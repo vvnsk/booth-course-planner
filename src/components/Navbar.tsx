@@ -1,6 +1,7 @@
-import React from 'react';
-import { Group, Title, Image, Paper, Text, Flex, ActionIcon } from '@mantine/core';
-import { IconSettings } from '@tabler/icons-react';
+import React, { useRef } from 'react';
+import { Group, Title, Image, Paper, Text, Flex, ActionIcon, Button } from '@mantine/core';
+import { IconSettings, IconDownload, IconUpload } from '@tabler/icons-react';
+import { notifications } from '@mantine/notifications';
 
 interface NavbarProps {
   totalUnits: number;
@@ -8,6 +9,8 @@ interface NavbarProps {
   flmbeCompleted: number;
   onSettingsClick?: () => void;
   showSettings?: boolean;
+  onExportSchedule?: () => void;
+  onImportSchedule?: (file: File) => Promise<void>;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ 
@@ -15,8 +18,50 @@ export const Navbar: React.FC<NavbarProps> = ({
   foundationCompleted, 
   flmbeCompleted,
   onSettingsClick,
-  showSettings = false
+  showSettings = false,
+  onExportSchedule,
+  onImportSchedule
 }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleExport = () => {
+    if (onExportSchedule) {
+      onExportSchedule();
+      notifications.show({
+        title: 'Schedule Exported',
+        message: 'Your course schedule has been downloaded successfully.',
+        color: 'green'
+      });
+    }
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && onImportSchedule) {
+      try {
+        await onImportSchedule(file);
+        notifications.show({
+          title: 'Schedule Imported',
+          message: 'Your course schedule has been loaded successfully.',
+          color: 'green'
+        });
+      } catch (error) {
+        notifications.show({
+          title: 'Import Failed',
+          message: error instanceof Error ? error.message : 'Failed to import schedule file.',
+          color: 'red'
+        });
+      }
+    }
+    // Reset the file input
+    if (event.target) {
+      event.target.value = '';
+    }
+  };
   return (
     <Paper 
       p="md" 
@@ -40,7 +85,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             />
           </div>
           <Title order={1} size="h2" c="white" style={{ marginLeft: '8px', flexShrink: 0 }}>
-            🎓 Booth Course Planner
+            Course Planner
           </Title>
         </Group>
         
@@ -57,6 +102,42 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Text size="xs" c="rgba(255, 255, 255, 0.7)">FLMBE</Text>
             <Text size="sm" fw={500} c="white">{flmbeCompleted}/7</Text>
           </div>
+          
+          {/* Import/Export buttons */}
+          <Group gap="xs">
+            <Button
+              variant="subtle"
+              size="xs"
+              leftSection={<IconDownload size={16} />}
+              onClick={handleExport}
+              style={{ 
+                color: 'rgba(255, 255, 255, 0.9)',
+                borderColor: 'rgba(255, 255, 255, 0.3)'
+              }}
+            >
+              Export
+            </Button>
+            <Button
+              variant="subtle"
+              size="xs"
+              leftSection={<IconUpload size={16} />}
+              onClick={handleImportClick}
+              style={{ 
+                color: 'rgba(255, 255, 255, 0.9)',
+                borderColor: 'rgba(255, 255, 255, 0.3)'
+              }}
+            >
+              Import
+            </Button>
+            <input
+              type="file"
+              accept=".json"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileSelect}
+            />
+          </Group>
+          
           <ActionIcon
             variant={showSettings ? 'filled' : 'subtle'}
             color={showSettings ? 'blue' : 'gray'}

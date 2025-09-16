@@ -55,7 +55,7 @@ const RequirementBox: React.FC<RequirementBoxProps> = ({ requirement }) => {
         style={{
           backgroundColor: requirement.completed ? '#e8f5e8' : 'white',
           borderColor: requirement.completed ? '#4caf50' : '#dee2e6',
-          minHeight: '100px',
+          minHeight: '50px',
           cursor: 'pointer'
         }}
       >

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
-import type { Course, Quarter, FoundationRequirement, FLMBEArea, Concentration } from '../types';
+import type { Course, Quarter, FoundationRequirement, FLMBEArea, Concentration, ExportablePlannerData } from '../types';
 import { parseBoothCourses } from '../utils/courseParser';
 import {
   initializeFoundationRequirements,
@@ -9,7 +9,10 @@ import {
   updateFoundationProgress,
   updateFLMBEProgress,
   updateConcentrationProgress,
-  getAllCoursesFromQuarters
+  getAllCoursesFromQuarters,
+  exportPlannerData,
+  downloadPlannerData,
+  importPlannerData
 } from '../utils/dataHelpers';
 
 // Context types
@@ -41,6 +44,10 @@ interface PlannerContextType {
   addQuarter: () => void;
   deleteQuarter: (quarterId: string) => void;
   resetQuarters: (startYear: number, startSeason: 'Autumn' | 'Winter' | 'Spring' | 'Summer') => void;
+  
+  // Import/Export actions
+  exportSchedule: (filename?: string) => void;
+  importSchedule: (file: File) => Promise<void>;
   
   // Course categorization helpers
   foundationCourses: Set<string>;
@@ -364,6 +371,26 @@ export const PlannerProvider: React.FC<PlannerProviderProps> = ({ children }) =>
     setQuarters(createDefaultQuarters(startYear, startSeason));
   };
 
+  // Import/Export functions
+  const exportSchedule = (filename?: string) => {
+    const exportData = exportPlannerData(quarters);
+    downloadPlannerData(exportData, filename);
+  };
+
+  const importSchedule = async (file: File): Promise<void> => {
+    try {
+      const importedData = await importPlannerData(file);
+      
+      // Update only quarters with imported data
+      setQuarters(importedData.quarters);
+      
+      console.log('Schedule imported successfully');
+    } catch (error) {
+      console.error('Failed to import schedule:', error);
+      throw error;
+    }
+  };
+
   const contextValue: PlannerContextType = {
     // Data
     quarters,
@@ -392,6 +419,10 @@ export const PlannerProvider: React.FC<PlannerProviderProps> = ({ children }) =>
     addQuarter,
     deleteQuarter,
     resetQuarters,
+    
+    // Import/Export actions
+    exportSchedule,
+    importSchedule,
     
     // Helpers
     foundationCourses,

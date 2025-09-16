@@ -1,4 +1,4 @@
-import type { Course, FoundationRequirement, FLMBEArea, Concentration, ConcentrationRequirement, Quarter } from '../types/index';
+import type { Course, FoundationRequirement, FLMBEArea, Concentration, ConcentrationRequirement, Quarter, ExportablePlannerData } from '../types/index';
 
 export const initializeFoundationRequirements = async (degreeData: any): Promise<FoundationRequirement[]> => {
   if (!degreeData) {
@@ -218,4 +218,65 @@ export const createDefaultQuarters = (
   }
   
   return quarters;
+};
+
+// Export/Import Functions
+export const exportPlannerData = (
+  quarters: Quarter[]
+): ExportablePlannerData => {
+  return {
+    version: '1.0',
+    exportDate: new Date().toISOString(),
+    quarters
+  };
+};
+
+export const downloadPlannerData = (data: ExportablePlannerData, filename?: string) => {
+  const jsonString = JSON.stringify(data, null, 2);
+  const blob = new Blob([jsonString], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename || `booth-course-plan-${new Date().toISOString().split('T')[0]}.json`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
+export const validateImportedData = (data: any): data is ExportablePlannerData => {
+  return (
+    data &&
+    typeof data.version === 'string' &&
+    typeof data.exportDate === 'string' &&
+    Array.isArray(data.quarters)
+  );
+};
+
+export const importPlannerData = (file: File): Promise<ExportablePlannerData> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = (event) => {
+      try {
+        const jsonString = event.target?.result as string;
+        const data = JSON.parse(jsonString);
+        
+        if (validateImportedData(data)) {
+          resolve(data);
+        } else {
+          reject(new Error('Invalid file format. Please select a valid Booth Course Planner export file.'));
+        }
+      } catch (error) {
+        reject(new Error('Failed to parse JSON file. Please check the file format.'));
+      }
+    };
+    
+    reader.onerror = () => {
+      reject(new Error('Failed to read file.'));
+    };
+    
+    reader.readAsText(file);
+  });
 };

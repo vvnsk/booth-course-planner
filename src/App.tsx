@@ -42,7 +42,9 @@ const AppContent: React.FC = () => {
     selectFoundationCourse,
     selectFLMBECourse,
     toggleConcentration,
-    addConcentrationCourse
+    addConcentrationCourse,
+    exportSchedule,
+    importSchedule
   } = usePlanner();
 
   if (isLoading) {
@@ -66,6 +68,8 @@ const AppContent: React.FC = () => {
             flmbeCompleted={flmbeRequirements.filter(r => r.completed).length}
             onSettingsClick={() => setShowSettings(!showSettings)}
             showSettings={showSettings}
+            onExportSchedule={exportSchedule}
+            onImportSchedule={importSchedule}
           />
 
           {/* Quarter Configuration - Collapsible */}
