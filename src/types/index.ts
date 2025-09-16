@@ -4,8 +4,7 @@ export interface Course {
   title: string;
   units: number;
   prerequisites?: string[];
-  rating?: number;
-  difficulty?: number;
+  quartersOffered?: string[];
 }
 
 export interface Quarter {
