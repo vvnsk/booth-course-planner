@@ -1,0 +1,243 @@
+{
+  "meta": {
+    "source": "Chicago Booth MBA Degree Requirements",
+    "catalog_year": "2025-26",
+    "revised_note": "New curriculum effective Autumn 2021; old curriculum applies to students who matriculated prior to Autumn 2021 and opted out of the new curriculum.",
+    "unit_convention": {
+      "note": "Booth offers both 100- and 50-unit courses.",
+      "fifty_unit_rule": "Two 50-unit courses from the SAME LINE must be paired to satisfy a 100-unit line requirement."
+    },
+    "graduation": {
+      "total_units_required": 2000,
+      "min_booth_units": 1400
+    },
+    "zero_unit_requirements": [
+      {
+        "name": "LEAD (Leadership Exploration and Development)",
+        "programs": ["Full-Time MBA", "Evening MBA", "Weekend MBA"],
+        "units": 0
+      },
+      {
+        "name": "Qualified Work Experience",
+        "applies_to": "Full-Time MBA students matriculating starting Autumn 2020",
+        "units": 0
+      }
+    ]
+  },
+  "curricula": [
+    {
+      "name": "New Curriculum",
+      "effective": "Autumn 2021",
+      "components": [
+        {
+          "component": "Foundations",
+          "total_units": 300,
+          "rule": "All 3 areas required; 100 units per area. Select one from each row.",
+          "areas": [
+            {
+              "line": "Financial Accounting",
+              "basic_courses": ["BUSN 30000"],
+              "approved_substitutes": ["BUSN 30116", "BUSN 30120", "BUSN 30122", "BUSN 30130", "BUSN 30131"]
+            },
+            {
+              "line": "Microeconomics",
+              "basic_courses": ["BUSN 33001", "BUSN 33002", "BUSN 33101"],
+              "approved_substitutes": ["BUSN 33230", "ECON 30100", "ECON 30200"]
+            },
+            {
+              "line": "Statistics",
+              "basic_courses": ["BUSN 41000", "BUSN 41100"],
+              "approved_substitutes": [
+                "BUSN 41202", "BUSN 41203", "BUSN 41204", "BUSN 41206", "BUSN 41207",
+                "BUSN 41215", "BUSN 41201", "BUSN 41301", "BUSN 41305", "BUSN 41813",
+                "BUSN 41814", "BUSN 41901", "BUSN 41902", "BUSN 41903", "BUSN 41910", "BUSN 41916"
+              ]
+            }
+          ]
+        },
+        {
+          "component": "Functions, Leadership and Management, and the Business Environment",
+          "short_name": "FLMBE",
+          "total_units": 700,
+          "rule": "Complete 7 of 8 areas; 100 units per selected area. Choose one course from each selected row.",
+          "areas": [
+            {
+              "group": "Functions",
+              "lines": [
+                {
+                  "line": "Finance",
+                  "basic_courses": ["BUSN 35000", "BUSN 35001", "BUSN 35200"],
+                  "approved_substitutes": [
+                    "BUSN 34101", "BUSN 34901", "BUSN 34902", "BUSN 34903", "BUSN 34904",
+                    "BUSN 35100", "BUSN 35120", "BUSN 35130", "BUSN 35150",
+                    "BUSN 35201", "BUSN 35210", "BUSN 35214"
+                  ]
+                },
+                {
+                  "line": "Marketing",
+                  "basic_courses": ["BUSN 37000", "BUSN 37110"],
+                  "approved_substitutes": [
+                    "BUSN 37101", "BUSN 37103", "BUSN 37105", "BUSN 37106", "BUSN 37107",
+                    "BUSN 37200", "BUSN 37201", "BUSN 37202", "BUSN 37208", "BUSN 37209",
+                    "BUSN 37110", "BUSN 37301", "BUSN 37304", "BUSN 37703", "BUSN 37704"
+                  ]
+                },
+                {
+                  "line": "Operations",
+                  "basic_courses": ["BUSN 40000"],
+                  "approved_substitutes": ["BUSN 40101", "BUSN 40108", "BUSN 40110"]
+                },
+                {
+                  "line": "Strategy",
+                  "basic_courses": ["BUSN 42001"],
+                  "approved_substitutes": ["BUSN 39001", "BUSN 39101", "BUSN 42116", "BUSN 42135", "BUSN 42715"]
+                }
+              ]
+            },
+            {
+              "group": "Leadership & Management",
+              "lines": [
+                {
+                  "line": "Decisions",
+                  "basic_courses": ["BUSN 30005", "BUSN 30001", "BUSN 36106", "BUSN 38002", "BUSN 38120"],
+                  "approved_substitutes": ["BUSN 36109"],
+                  "notes": ["30005 or 30001 may be used as the basic option."]
+                },
+                {
+                  "line": "People",
+                  "basic_courses": ["BUSN 33032", "BUSN 38001", "BUSN 38003", "BUSN 39002"],
+                  "approved_substitutes": ["BUSN 31403", "BUSN 38122"]
+                }
+              ]
+            },
+            {
+              "group": "Business Environment",
+              "lines": [
+                {
+                  "line": "Economy",
+                  "basic_courses": ["BUSN 33050", "BUSN 33040", "BUSN 33112"],
+                  "approved_substitutes": ["BUSN 33401", "BUSN 33403", "BUSN 33501", "BUSN 33502", "BUSN 33503", "BUSN 33520"]
+                },
+                {
+                  "line": "Society",
+                  "basic_courses": ["BUSN 33305", "BUSN 33471", "BUSN 37212", "BUSN 38119"],
+                  "approved_substitutes": [
+                    "BUSN 30133", "BUSN 33251", "BUSN 34113", "BUSN 34117",
+                    "BUSN 38115", "BUSN 38126", "BUSN 42201"
+                  ],
+                  "notes": ["BUSN 33251 requires concurrent enrollment in BUSN 33250."]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "component": "Electives",
+          "total_units": 1000,
+          "rule": "Choose any electives to reach at least 1000 elective units (subject to overall graduation minimums and unit pairing rules)."
+        }
+      ]
+    },
+    {
+      "name": "Old Curriculum",
+      "effective": "For students matriculating prior to Autumn 2021 who opted out of new curriculum",
+      "components": [
+        {
+          "component": "Foundations",
+          "total_units": 300,
+          "rule": "One course from each row; 100 units per area.",
+          "areas": [
+            {
+              "line": "Financial Accounting",
+              "basic_courses": ["BUSN 30000"],
+              "approved_substitutes": ["BUSN 30116", "BUSN 30120", "BUSN 30122", "BUSN 30130", "BUSN 30131"]
+            },
+            {
+              "line": "Microeconomics",
+              "basic_courses": ["BUSN 33001", "BUSN 33002", "BUSN 33101"],
+              "approved_substitutes": ["BUSN 33230", "ECON 30100", "ECON 30200"]
+            },
+            {
+              "line": "Statistics",
+              "basic_courses": ["BUSN 41000", "BUSN 41100"],
+              "approved_substitutes": [
+                "BUSN 41202", "BUSN 41203", "BUSN 41204", "BUSN 41206", "BUSN 41207",
+                "BUSN 41215", "BUSN 41201", "BUSN 41301", "BUSN 41305", "BUSN 41813",
+                "BUSN 41814", "BUSN 41901", "BUSN 41902", "BUSN 41903", "BUSN 41910", "BUSN 41916"
+              ]
+            }
+          ]
+        },
+        {
+          "component": "Functions, Management, and the Business Environment",
+          "short_name": "FMBE",
+          "total_units": 600,
+          "rule": "Complete 6 of 7 rows; 100 units per selected row. Choose one course from each selected row.",
+          "rows": [
+            {
+              "group": "Functions",
+              "lines": [
+                {
+                  "line": "Finance",
+                  "basic_courses": ["BUSN 35000", "BUSN 35001", "BUSN 35200"],
+                  "approved_substitutes": [
+                    "BUSN 34101", "BUSN 35100", "BUSN 35120", "BUSN 35130", "BUSN 35150",
+                    "BUSN 35201", "BUSN 35210", "BUSN 35214", "BUSN 35901", "BUSN 35902", "BUSN 35903", "BUSN 35904"
+                  ]
+                },
+                {
+                  "line": "Marketing",
+                  "basic_courses": ["BUSN 37000", "BUSN 37110"],
+                  "approved_substitutes": [
+                    "BUSN 37101", "BUSN 37103", "BUSN 37105", "BUSN 37106", "BUSN 37107",
+                    "BUSN 37200", "BUSN 37201", "BUSN 37202", "BUSN 37208", "BUSN 37209",
+                    "BUSN 37110", "BUSN 37301", "BUSN 37304", "BUSN 37703", "BUSN 37704"
+                  ]
+                },
+                {
+                  "line": "Operations",
+                  "basic_courses": ["BUSN 40000"],
+                  "approved_substitutes": ["BUSN 40101", "BUSN 40108", "BUSN 40110"]
+                }
+              ]
+            },
+            {
+              "group": "Management",
+              "lines": [
+                {
+                  "line": "Decisions",
+                  "basic_courses": ["BUSN 30005", "BUSN 30001", "BUSN 36106", "BUSN 38002", "BUSN 38120"],
+                  "approved_substitutes": ["BUSN 36109"]
+                },
+                {
+                  "line": "People",
+                  "basic_courses": ["BUSN 33032", "BUSN 38001", "BUSN 38003", "BUSN 39002"]
+                },
+                {
+                  "line": "Strategy",
+                  "basic_courses": ["BUSN 42001"],
+                  "approved_substitutes": ["BUSN 39001"]
+                }
+              ]
+            },
+            {
+              "group": "Business Environment",
+              "lines": [
+                {
+                  "line": "Business Environment",
+                  "basic_courses": ["BUSN 33050", "BUSN 33040", "BUSN 33305", "BUSN 33112", "BUSN 33471"],
+                  "approved_substitutes": ["BUSN 33401", "BUSN 33403", "BUSN 33501", "BUSN 33502", "BUSN 33520", "BUSN 42201"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "component": "Electives",
+          "total_units": 1100,
+          "rule": "Choose any electives to reach at least 1100 elective units (subject to overall graduation minimums and unit pairing rules)."
+        }
+      ]
+    }
+  ]
+}

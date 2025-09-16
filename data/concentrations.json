@@ -1,0 +1,267 @@
+{
+  "meta": {
+    "source": "Chicago Booth Concentration Requirements",
+    "revised": "2025-07-08",
+    "unit_note": "Most Booth courses are 100 units; some are 50. 50-unit courses may satisfy half of a degree or concentration requirement; pairing isn't always provided.",
+    "grading_rule": {
+      "min_grade": "D",
+      "min_gpa_for_sequence": 2.33,
+      "applies_to": "all courses counted toward a concentration"
+    }
+  },
+  "notes": [
+    "A transcript notation is added if a concentration is completed.",
+    "Concentrations are not required for graduation."
+  ],
+  "cross_counting_limits": [
+    {
+      "areas": ["Applied Artificial Intelligence", "Business Analytics"],
+      "max_shared_units": 100
+    },
+    {
+      "areas": ["Entrepreneurship", "Strategic Management"],
+      "max_shared_units": 100
+    }
+  ],
+  "concentrations": {
+    "Accounting": {
+      "requirements": [
+        {
+          "type": "elective_bucket",
+          "min_units": 400,
+          "eligible_courses": ["BUSN 30000", "BUSN 30005", "BUSN 30001", "BUSN 30116", "BUSN 30118", "BUSN 30120", "BUSN 30121", "BUSN 30122", "BUSN 30130", "BUSN 30131", "BUSN 30132", "BUSN 30133", "BUSN 30135", "BUSN 30830", "BUSN 30835", "BUSN 30840"],
+          "notes": ["30005 or 30001 may be used."]
+        }
+      ]
+    },
+    "Applied Artificial Intelligence": {
+      "requirements": [
+        {
+          "type": "elective_bucket",
+          "min_units": 300,
+          "eligible_courses": ["BUSN 30135", "BUSN 32210", "BUSN 32810", "BUSN 35137", "BUSN 43100", "BUSN 32200", "BUSN 43110", "BUSN 43120", "BUSN 43130", "BUSN 43950"],
+          "notes": ["43100 or 32200 may be used; count only one."]
+        }
+      ]
+    },
+    "Behavioral Science": {
+      "requirements": [
+        {
+          "type": "elective_bucket",
+          "min_units": 400,
+          "eligible_courses": ["BUSN 31403", "BUSN 31702", "BUSN 38001", "BUSN 38002", "BUSN 38003", "BUSN 38101", "BUSN 38102", "BUSN 38103", "BUSN 38105", "BUSN 38107", "BUSN 38115", "BUSN 38116", "BUSN 38118", "BUSN 38119", "BUSN 38120", "BUSN 38122", "BUSN 38123", "BUSN 38126", "BUSN 38820", "BUSN 38821", "BUSN 38825", "BUSN 38870", "BUSN 38865", "BUSN 38886", "BUSN 39002"]
+        }
+      ]
+    },
+    "Business Analytics": {
+      "requirements": [
+        {
+          "type": "bucket",
+          "name": "Data Science",
+          "min_units": 100,
+          "eligible_courses": ["BUSN 41201", "BUSN 41204"]
+        },
+        {
+          "type": "bucket",
+          "name": "Decision Models & Optimization",
+          "min_units": 100,
+          "eligible_courses": ["BUSN 36106", "BUSN 36109"]
+        },
+        {
+          "type": "elective_bucket",
+          "name": "Analytics Electives",
+          "min_units": 300,
+          "eligible_courses": ["BUSN 32100", "BUSN 32120", "BUSN 32130", "BUSN 32810", "BUSN 35126", "BUSN 35137", "BUSN 36109", "BUSN 37103", "BUSN 37105", "BUSN 37107", "BUSN 37202", "BUSN 37802", "BUSN 40108", "BUSN 40206", "BUSN 40205", "BUSN 40721", "BUSN 41201", "BUSN 41202", "BUSN 41203", "BUSN 41204", "BUSN 41215", "BUSN 41301", "BUSN 41305", "BUSN 43100", "BUSN 32200", "BUSN 41814"],
+          "caps": [{"grouping": "per_area", "max_units": 200}],
+          "notes": ["Where pairs are shown as A (or B), count only one of A or B."]
+        }
+      ]
+    },
+    "Business, Society and Sustainability": {
+      "requirements": [
+        {
+          "type": "elective_bucket",
+          "min_units": 400,
+          "eligible_courses": ["BUSN 30133", "BUSN 31425", "BUSN 33251", "BUSN 33250", "BUSN 33305", "BUSN 33471", "BUSN 34113", "BUSN 34115", "BUSN 34117", "BUSN 35225", "BUSN 37212", "BUSN 38112", "BUSN 38115", "BUSN 38119", "BUSN 38128", "BUSN 42125", "BUSN 42129", "BUSN 42708", "BUSN 42710", "BUSN 42711", "BUSN 42712", "BUSN 43130"],
+          "notes": ["33251 requires concurrent enrollment in 33250."]
+        }
+      ]
+    },
+    "Econometrics and Statistics": {
+      "requirements": [
+        {
+          "type": "elective_bucket",
+          "min_units": 300,
+          "eligible_courses": ["BUSN 41000", "BUSN 41100", "BUSN 41202", "BUSN 41203", "BUSN 41204", "BUSN 41206", "BUSN 41813", "BUSN 41207", "BUSN 41215", "BUSN 41201", "BUSN 41301", "BUSN 41305", "BUSN 41814", "BUSN 41901", "BUSN 41902", "BUSN 41903", "BUSN 41910"],
+          "notes": ["41206 or 41813; 41215 or 41201; 41301 or 41305 — count one from each pair."]
+        }
+      ]
+    },
+    "Economics": {
+      "requirements": [
+        {
+          "type": "elective_bucket",
+          "min_units": 400,
+          "eligible_courses": ["BUSN 33032", "BUSN 33050", "BUSN 33040", "BUSN 33101", "BUSN 33112", "BUSN 33230", "BUSN 33251", "BUSN 33250", "BUSN 33301", "BUSN 33305", "BUSN 33320", "BUSN 33350", "BUSN 33401", "BUSN 33403", "BUSN 33454", "BUSN 33501", "BUSN 33502", "BUSN 33503", "BUSN 33520", "BUSN 33882", "BUSN 38120", "BUSN 42001", "BUSN 42116", "BUSN 42135"],
+          "exclusions": ["BUSN 33001", "BUSN 33002"],
+          "notes": ["33050 or 33040; 33251 requires concurrent 33250; 33501 or 33502 or 33503 — pick as applicable."]
+        }
+      ]
+    },
+    "Entrepreneurship": {
+      "requirements": [
+        {
+          "type": "elective_bucket",
+          "min_units": 300,
+          "eligible_courses": ["BUSN 30118", "BUSN 30121", "BUSN 31401", "BUSN 31402", "BUSN 31403", "BUSN 34101", "BUSN 34102", "BUSN 34103", "BUSN 34104", "BUSN 34106", "BUSN 34108", "BUSN 34111", "BUSN 34113", "BUSN 34115", "BUSN 34117", "BUSN 34205", "BUSN 34206", "BUSN 34208", "BUSN 34210", "BUSN 34211", "BUSN 34214", "BUSN 34215", "BUSN 34219", "BUSN 34220", "BUSN 34302", "BUSN 34305", "BUSN 34308", "BUSN 34702", "BUSN 34704", "BUSN 34705", "BUSN 34709", "BUSN 34715", "BUSN 34815", "BUSN 34816", "BUSN 34820", "BUSN 34825", "BUSN 34826", "BUSN 34880", "BUSN 34882", "BUSN 34887", "BUSN 35123", "BUSN 35213", "BUSN 35823", "BUSN 36110", "BUSN 37201", "BUSN 37200", "BUSN 37301", "BUSN 37703", "BUSN 39101", "BUSN 40110", "BUSN 41206", "BUSN 41813", "BUSN 41301", "BUSN 41305", "BUSN 42705", "BUSN 42711", "BUSN 42820", "BUSN 43120", "LAWS 43225"],
+          "notes": ["Use only one where pairs are listed as A (or B)."]
+        }
+      ]
+    },
+    "Finance": {
+      "requirements": [
+        {
+          "type": "bucket",
+          "name": "Asset Pricing",
+          "min_units": 100,
+          "eligible_courses": ["BUSN 34901", "BUSN 34902", "BUSN 35000", "BUSN 35100", "BUSN 35101", "BUSN 35120", "BUSN 35121", "BUSN 35126", "BUSN 35130", "BUSN 35132", "BUSN 35901", "BUSN 35908"]
+        },
+        {
+          "type": "bucket",
+          "name": "Corporate Finance",
+          "min_units": 100,
+          "eligible_courses": ["BUSN 34101", "BUSN 34903", "BUSN 34904", "BUSN 34905", "BUSN 34906", "BUSN 35200", "BUSN 35201", "BUSN 35202", "BUSN 35210", "BUSN 35213", "BUSN 35214", "BUSN 35215"]
+        },
+        {
+          "type": "elective_bucket",
+          "name": "Finance Electives",
+          "min_units": 200,
+          "eligible_courses": ["BUSN 30130", "BUSN 30131", "BUSN 34101", "BUSN 34901", "BUSN 34902", "BUSN 34903", "BUSN 34904", "BUSN 35100", "BUSN 35101", "BUSN 35118", "BUSN 35120", "BUSN 35121", "BUSN 35123", "BUSN 35126", "BUSN 35130", "BUSN 35131", "BUSN 35136", "BUSN 35135", "BUSN 35137", "BUSN 35139", "BUSN 35141", "BUSN 35144", "BUSN 35124", "BUSN 35146", "BUSN 35145", "BUSN 35150", "BUSN 35155", "BUSN 35201", "BUSN 35202", "BUSN 35207", "BUSN 35210", "BUSN 35213", "BUSN 35214", "BUSN 35215", "BUSN 35218", "BUSN 35219", "BUSN 35222", "BUSN 35220", "BUSN 35225", "ECON 28620", "BUSN 35823", "BUSN 35824", "BUSN 35889", "BUSN 35901", "BUSN 35907", "BUSN 35908", "BUSN 35916", "BUSN 41203"],
+          "special_counting_rules": [
+            "BUSN 33450 + 33451 jointly count as 100 units.",
+            "If taking BUSN 35000 and 35200, then only one of BUSN 34901 or 34902 may be counted among the two additional courses."
+          ]
+        }
+      ],
+      "notes": [
+        "Courses that meet Finance but not Analytic Finance include BUSN 30130, 30131, 35000, 35101, 35123."
+      ]
+    },
+    "Analytic Finance": {
+      "requirements": [
+        {
+          "type": "elective_bucket",
+          "min_units": 600,
+          "eligible_courses": ["BUSN 34101", "BUSN 34901", "BUSN 34902", "BUSN 34903", "BUSN 34904", "BUSN 34905", "BUSN 34906", "BUSN 35100", "BUSN 35118", "BUSN 35120", "BUSN 35121", "BUSN 35123", "BUSN 35126", "BUSN 35130", "BUSN 35136", "BUSN 35137", "BUSN 35139", "BUSN 35141", "BUSN 35150", "BUSN 35155", "BUSN 35200", "BUSN 35201", "BUSN 35202", "BUSN 35207", "BUSN 35210", "BUSN 35213", "BUSN 35214", "BUSN 35215", "BUSN 35218", "BUSN 35219", "BUSN 35901", "BUSN 35907", "BUSN 35908", "BUSN 35916", "BUSN 41203"],
+          "notes": ["Student must also satisfy the Finance concentration requirements."]
+        }
+      ]
+    },
+    "General Management": {
+      "paths": [
+        {
+          "name": "Default Curriculum (effective Autumn 2021)",
+          "requirements": [
+            {
+              "type": "program_breadth",
+              "lines_completed": 8,
+              "units": 800,
+              "areas": ["Functions", "Leadership and Management", "Business Environment"]
+            },
+            {
+              "type": "concentration_electives",
+              "min_units": 300,
+              "eligible_concentration_sources": ["Strategic Management", "Behavioral Science"],
+              "combo_allowed": true
+            }
+          ],
+          "total_units": 1100
+        },
+        {
+          "name": "Pre-Autumn 2021 Curriculum",
+          "requirements": [
+            {
+              "type": "program_breadth",
+              "lines_completed": 7,
+              "areas": ["Functions", "Management", "Business Environment"]
+            },
+            {
+              "type": "concentration_electives",
+              "min_units": 300,
+              "eligible_concentration_sources": ["Strategic Management", "Behavioral Science"],
+              "combo_allowed": true
+            }
+          ],
+          "total_units": 1000
+        }
+      ]
+    },
+    "Healthcare": {
+      "requirements": [
+        {
+          "type": "bucket",
+          "name": "Core",
+          "min_units": 100,
+          "eligible_courses": ["BUSN 33350", "BUSN 40206", "BUSN 40205"]
+        },
+        {
+          "type": "bucket",
+          "name": "Healthcare Electives",
+          "min_units": 200,
+          "max_units": 300,
+          "eligible_courses": ["BUSN 33351", "BUSN 33352", "BUSN 33353", "BUSN 34205", "BUSN 34210", "BUSN 35118", "BUSN 42300", "BUSN 42310"]
+        },
+        {
+          "type": "experiential_credit",
+          "name": "Pre-approved Experiential (by petition)",
+          "max_units": 100,
+          "eligible_courses": ["BUSN 34104", "BUSN 34115", "BUSN 34702", "BUSN 34705", "BUSN 34709", "BUSN 37201", "BUSN 37703", "BUSN 40721", "BUSN 42709", "BUSN 42710"],
+          "scope": "course must include a healthcare project"
+        }
+      ],
+      "total_units": 400
+    },
+    "International Business": {
+      "requirements": [
+        {
+          "type": "elective_bucket",
+          "min_units": 300,
+          "eligible_courses": ["BUSN 30131", "BUSN 33501", "BUSN 33502", "BUSN 33503", "BUSN 33520", "BUSN 35210", "BUSN 35213", "BUSN 35219"],
+          "must_include_one_of": ["BUSN 33501", "BUSN 33502"]
+        }
+      ]
+    },
+    "Marketing Management": {
+      "requirements": [
+        {
+          "type": "core",
+          "min_units": 100,
+          "eligible_courses": ["BUSN 37000", "BUSN 37110"]
+        },
+        {
+          "type": "elective_bucket",
+          "min_units": 300,
+          "eligible_courses": ["BUSN 37101", "BUSN 37103", "BUSN 37105", "BUSN 37107", "BUSN 37110", "BUSN 37200", "BUSN 37201", "BUSN 37202", "BUSN 37208", "BUSN 37209", "BUSN 37212", "BUSN 37215", "BUSN 37301", "BUSN 37703", "BUSN 37810", "BUSN 37816", "BUSN 37820", "BUSN 37882", "BUSN 37902", "BUSN 41301", "BUSN 41305"]
+        }
+      ]
+    },
+    "Operations Management": {
+      "requirements": [
+        {
+          "type": "elective_bucket",
+          "min_units": 300,
+          "eligible_courses": ["BUSN 36106", "BUSN 36109", "BUSN 40000", "BUSN 40101", "BUSN 40108", "BUSN 40110", "BUSN 40111", "BUSN 40206", "BUSN 40205", "BUSN 40721", "BUSN 40812"]
+        }
+      ]
+    },
+    "Strategic Management": {
+      "requirements": [
+        {
+          "type": "elective_bucket",
+          "min_units": 400,
+          "eligible_courses": ["BUSN 32200", "BUSN 33230", "BUSN 33503", "BUSN 34102", "BUSN 34103", "BUSN 34106", "BUSN 34108", "BUSN 34117", "BUSN 34220", "BUSN 34816", "BUSN 37201", "BUSN 37200", "BUSN 39001", "BUSN 39101", "BUSN 42001", "BUSN 42108", "BUSN 42116", "BUSN 42119", "BUSN 42121", "BUSN 42123", "BUSN 42124", "BUSN 42125", "BUSN 42126", "BUSN 42127", "BUSN 42135", "BUSN 42705", "BUSN 42708", "BUSN 42709", "BUSN 42710", "BUSN 42711", "BUSN 42715", "BUSN 42726", "BUSN 42813", "BUSN 42819", "BUSN 42820"]
+        }
+      ]
+    }
+  }
+}
