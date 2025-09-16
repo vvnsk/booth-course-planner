@@ -81,8 +81,17 @@ export const PlannerProvider: React.FC<PlannerProviderProps> = ({ children }) =>
         const degreeData = await degreeResp.json();
         const concentrationsDataLoaded = await concentrationsResp.json();
         
+        // Remove duplicate courses based on course code
+        const uniqueCourses = courses.filter((course, index, self) => 
+          index === self.findIndex(c => c.code === course.code)
+        );
+        
+        if (uniqueCourses.length !== courses.length) {
+          console.log(`Removed ${courses.length - uniqueCourses.length} duplicate courses from source data`);
+        }
+        
         // Set the data
-        setAvailableCourses(courses);
+        setAvailableCourses(uniqueCourses);
         setQuarters(createDefaultQuarters());
         setFoundationRequirements(initializeFoundationRequirements());
         setFlmbeRequirements(initializeFLMBERequirements());

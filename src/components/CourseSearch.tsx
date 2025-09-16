@@ -19,30 +19,114 @@ export const CourseSearch: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0); // Force re-render mechanism
+
+  // Debug function to log course categorization
+  const debugCategorization = () => {
+    const categories = {
+      foundation: 0,
+      flmbe: 0,
+      other: 0,
+      concentrations: {} as { [key: string]: number }
+    };
+
+    availableCourses.forEach(course => {
+      const category = categorizeCourse(course);
+      if (category === 'foundation') {
+        categories.foundation++;
+      } else if (category === 'flmbe') {
+        categories.flmbe++;
+      } else if (category === 'other') {
+        categories.other++;
+      } else {
+        // It's a concentration
+        categories.concentrations[category] = (categories.concentrations[category] || 0) + 1;
+      }
+    });
+
+    console.log('Course categorization:', categories);
+    console.log('Foundation courses set size:', foundationCourses.size);
+    console.log('FLMBE courses set size:', flmbeCourses.size);
+    console.log('Concentration sets:', Object.keys(concentrationCourseSets).map(key => 
+      `${key}: ${concentrationCourseSets[key].size}`
+    ));
+  };
+
+  // Run debug on mount and when data changes
+  React.useEffect(() => {
+    if (availableCourses.length > 0) {
+      debugCategorization();
+    }
+  }, [availableCourses, foundationCourses, flmbeCourses, concentrationCourseSets]);
   
   // Filter courses based on search term
   const filteredCourses = useMemo(() => {
-    let filtered = availableCourses;
+    // Early return if no courses available
+    if (!availableCourses.length) {
+      return [];
+    }
+
+    let filtered = [...availableCourses]; // Create a copy to avoid mutation
+    
+    console.log(`Starting with ${availableCourses.length} total courses`);
+    console.log(`Selected filter: "${selectedFilter}"`);
+    
+    // Apply category filter first
+    if (selectedFilter !== 'all') {
+      const beforeFilter = filtered.length;
+      filtered = filtered.filter(course => {
+        const category = categorizeCourse(course);
+        return category === selectedFilter;
+      });
+      console.log(`Filter: ${selectedFilter}, Filtered from ${beforeFilter} to ${filtered.length} courses`);
+      
+      // Sample some results for debugging
+      if (filtered.length > 0) {
+        console.log(`Sample filtered courses: ${filtered.slice(0, 3).map(c => c.code).join(', ')}`);
+      }
+    }
     
     // Apply search filter
     if (searchTerm) {
+      const beforeSearch = filtered.length;
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(course => 
         course.code.toLowerCase().includes(term) ||
         course.title.toLowerCase().includes(term)
       );
-    }
-
-    // Apply category filter
-    if (selectedFilter !== 'all') {
-      filtered = filtered.filter(course => {
-        const category = categorizeCourse(course);
-        return category === selectedFilter;
-      });
+      console.log(`Search: "${searchTerm}", Filtered from ${beforeSearch} to ${filtered.length} courses`);
     }
     
-    return filtered;
-  }, [availableCourses, searchTerm, selectedFilter, categorizeCourse]);
+    // Remove duplicates based on course code
+    const uniqueCourses = filtered.filter((course, index, self) => 
+      index === self.findIndex(c => c.code === course.code)
+    );
+    
+    if (uniqueCourses.length !== filtered.length) {
+      console.log(`Removed ${filtered.length - uniqueCourses.length} duplicate courses`);
+    }
+    
+    console.log(`Final result: ${uniqueCourses.length} courses`);
+    return uniqueCourses;
+  }, [availableCourses, searchTerm, selectedFilter, categorizeCourse, forceUpdate]);
+
+  // Handle filter change
+  const handleFilterChange = (newFilter: string) => {
+    console.log(`\n=== FILTER CHANGE ===`);
+    console.log(`Changing filter from "${selectedFilter}" to "${newFilter}"`);
+    
+    // Debug: Show sample courses for the new filter
+    if (newFilter !== 'all' && availableCourses.length > 0) {
+      const sampleCourses = availableCourses
+        .filter(course => categorizeCourse(course) === newFilter)
+        .slice(0, 5);
+      console.log(`Sample courses for filter "${newFilter}":`, sampleCourses.map(c => `${c.code}: ${categorizeCourse(c)}`));
+    }
+    
+    setSelectedFilter(newFilter);
+    setForceUpdate(prev => prev + 1); // Force re-render
+    console.log(`======================\n`);
+  };
 
   // Handle adding course to first available quarter
   const handleAddCourse = (course: any) => {
@@ -96,7 +180,7 @@ export const CourseSearch: React.FC = () => {
               variant={selectedFilter === 'all' ? 'filled' : 'light'}
               color="blue"
               style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
-              onClick={() => setSelectedFilter('all')}
+              onClick={() => handleFilterChange('all')}
             >
               All
             </Badge>
@@ -104,7 +188,7 @@ export const CourseSearch: React.FC = () => {
               variant={selectedFilter === 'foundation' ? 'filled' : 'light'}
               color="green"
               style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
-              onClick={() => setSelectedFilter('foundation')}
+              onClick={() => handleFilterChange('foundation')}
             >
               Foundation
             </Badge>
@@ -112,7 +196,7 @@ export const CourseSearch: React.FC = () => {
               variant={selectedFilter === 'flmbe' ? 'filled' : 'light'}
               color="orange"
               style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
-              onClick={() => setSelectedFilter('flmbe')}
+              onClick={() => handleFilterChange('flmbe')}
             >
               FLMBE
             </Badge>
@@ -122,7 +206,7 @@ export const CourseSearch: React.FC = () => {
                 variant={selectedFilter === concentration ? 'filled' : 'light'}
                 color="purple"
                 style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
-                onClick={() => setSelectedFilter(concentration)}
+                onClick={() => handleFilterChange(concentration)}
               >
                 {getConcentrationDisplayName(concentration)}
               </Badge>
@@ -131,7 +215,7 @@ export const CourseSearch: React.FC = () => {
               variant={selectedFilter === 'other' ? 'filled' : 'light'}
               color="gray"
               style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
-              onClick={() => setSelectedFilter('other')}
+              onClick={() => handleFilterChange('other')}
             >
               Other
             </Badge>
@@ -148,8 +232,8 @@ export const CourseSearch: React.FC = () => {
                 No courses found matching your criteria
               </Text>
             ) : (
-              filteredCourses.map((course) => (
-                <div key={course.code} style={{ minWidth: '250px' }}>
+              filteredCourses.map((course, index) => (
+                <div key={`${course.code}-${index}-${course.title?.slice(0, 10) || ''}`} style={{ minWidth: '250px' }}>
                   <CourseCard
                     course={course}
                     isDraggable={true}
