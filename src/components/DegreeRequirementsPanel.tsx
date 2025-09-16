@@ -1,59 +1,89 @@
 import React from 'react';
-import { Paper, Text, Stack, Group, Progress, Select } from '@mantine/core';
-import { IconCheck } from '@tabler/icons-react';
+import { Paper, Text, Stack, Group, Progress, Tooltip } from '@mantine/core';
+import { IconCheck, IconCircle, IconCircleCheck } from '@tabler/icons-react';
 import type { FoundationRequirement } from '../types/index';
 
 interface RequirementBoxProps {
   requirement: FoundationRequirement;
-  onCourseSelect: (area: string, courseCode: string) => void;
+  onCourseSelect?: (area: string, courseCode: string) => void;
 }
 
 const RequirementBox: React.FC<RequirementBoxProps> = ({ requirement, onCourseSelect }) => {
   const allEligibleCourses = [...requirement.basicCourses, ...requirement.approvedSubstitutes];
   
+  const tooltipContent = (
+    <Stack gap="xs" style={{ maxWidth: 300 }}>
+      <Text size="sm" fw={500}>{requirement.area}</Text>
+      {requirement.selectedCourse && (
+        <Text size="xs" c="green">
+          Selected: {requirement.selectedCourse}
+        </Text>
+      )}
+      <Text size="xs" fw={500}>Basic Courses:</Text>
+      <Text size="xs">
+        {requirement.basicCourses.join(', ')}
+      </Text>
+      {requirement.approvedSubstitutes.length > 0 && (
+        <>
+          <Text size="xs" fw={500}>Approved Substitutes:</Text>
+          <Text size="xs">
+            {requirement.approvedSubstitutes.join(', ')}
+          </Text>
+        </>
+      )}
+    </Stack>
+  );
+  
   return (
-    <Paper
-      p="md"
-      radius="md"
-      withBorder
-      style={{
-        backgroundColor: requirement.completed ? '#e8f5e8' : 'white',
-        borderColor: requirement.completed ? '#4caf50' : '#dee2e6',
-        minHeight: '120px'
+    <Tooltip
+      label={tooltipContent}
+      multiline
+      withArrow
+      position="top"
+      styles={{
+        tooltip: {
+          maxWidth: 350,
+          wordWrap: 'break-word'
+        }
       }}
     >
-      <Stack gap="sm">
-        <Group justify="space-between" align="center">
-          <Text size="sm" fw={600}>
-            {requirement.area}
-          </Text>
-          {requirement.completed && (
-            <IconCheck size={20} color="#4caf50" />
+      <Paper
+        p="md"
+        radius="md"
+        withBorder
+        style={{
+          backgroundColor: requirement.completed ? '#e8f5e8' : 'white',
+          borderColor: requirement.completed ? '#4caf50' : '#dee2e6',
+          minHeight: '100px',
+          cursor: 'pointer'
+        }}
+      >
+        <Stack gap="sm">
+          <Group justify="space-between" align="center">
+            <Text size="sm" fw={600} lineClamp={2} style={{ flex: 1 }}>
+              {requirement.area}
+            </Text>
+            {requirement.completed ? (
+              <IconCircleCheck size={24} color="#4caf50" />
+            ) : (
+              <IconCircle size={24} color="#dee2e6" />
+            )}
+          </Group>
+          
+          {requirement.selectedCourse && (
+            <Text size="xs" c="green" fw={500} lineClamp={1}>
+              {requirement.selectedCourse}
+            </Text>
           )}
-        </Group>
-        
-        <Select
-          placeholder="Select a course"
-          value={requirement.selectedCourse || ''}
-          onChange={(value) => value && onCourseSelect(requirement.area, value)}
-          data={allEligibleCourses.map(course => ({
-            value: course,
-            label: course
-          }))}
-          size="sm"
-        />
-        
-        <Text size="xs" c="dimmed">
-          Basic: {requirement.basicCourses.join(', ')}
-        </Text>
-      </Stack>
-    </Paper>
+        </Stack>
+      </Paper>
+    </Tooltip>
   );
 };
 
 interface DegreeRequirementsPanelProps {
   foundationRequirements: FoundationRequirement[];
-  onCourseSelect: (area: string, courseCode: string) => void;
+  onCourseSelect?: (area: string, courseCode: string) => void;
 }
 
 export const DegreeRequirementsPanel: React.FC<DegreeRequirementsPanelProps> = ({

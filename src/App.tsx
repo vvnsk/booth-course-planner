@@ -162,7 +162,7 @@ function App() {
 
           <Grid>
             {/* Left Column - Quarters */}
-            <Grid.Col span={8}>
+            <Grid.Col span={6}>
               <Paper p="md" withBorder style={{ backgroundColor: '#f8f9fa' }}>
                 <Title order={3} mb="md">Quarterly Schedule</Title>
                 <ScrollArea>
@@ -182,7 +182,7 @@ function App() {
             </Grid.Col>
 
             {/* Right Column - Requirements */}
-            <Grid.Col span={4}>
+            <Grid.Col span={6}>
               <Stack gap="md">
                 <DegreeRequirementsPanel
                   foundationRequirements={foundationRequirements}

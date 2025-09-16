@@ -1,11 +1,11 @@
 import React from 'react';
-import { Paper, Text, Stack, Group, Progress, Select, SimpleGrid, Badge } from '@mantine/core';
-import { IconCheck } from '@tabler/icons-react';
+import { Paper, Text, Stack, Group, Progress, SimpleGrid, Badge, Tooltip } from '@mantine/core';
+import { IconCheck, IconCircle, IconCircleCheck } from '@tabler/icons-react';
 import type { FLMBEArea } from '../types/index';
 
 interface FLMBEBoxProps {
   area: FLMBEArea;
-  onCourseSelect: (line: string, courseCode: string) => void;
+  onCourseSelect?: (line: string, courseCode: string) => void;
 }
 
 const FLMBEBox: React.FC<FLMBEBoxProps> = ({ area, onCourseSelect }) => {
@@ -19,56 +19,87 @@ const FLMBEBox: React.FC<FLMBEBoxProps> = ({ area, onCourseSelect }) => {
       default: return 'gray';
     }
   };
+
+  const tooltipContent = (
+    <Stack gap="xs" style={{ maxWidth: 300 }}>
+      <Text size="sm" fw={500}>{area.line}</Text>
+      {area.selectedCourse && (
+        <Text size="xs" c="green">
+          Selected: {area.selectedCourse}
+        </Text>
+      )}
+      <Text size="xs" fw={500}>Basic Courses:</Text>
+      <Text size="xs">
+        {area.basicCourses.join(', ')}
+      </Text>
+      {area.approvedSubstitutes.length > 0 && (
+        <>
+          <Text size="xs" fw={500}>Approved Substitutes:</Text>
+          <Text size="xs">
+            {area.approvedSubstitutes.join(', ')}
+          </Text>
+        </>
+      )}
+    </Stack>
+  );
   
   return (
-    <Paper
-      p="sm"
-      radius="md"
-      withBorder
-      style={{
-        backgroundColor: area.completed ? '#e8f5e8' : 'white',
-        borderColor: area.completed ? '#4caf50' : '#dee2e6',
-        minHeight: '140px'
+    <Tooltip
+      label={tooltipContent}
+      multiline
+      withArrow
+      position="top"
+      styles={{
+        tooltip: {
+          maxWidth: 350,
+          wordWrap: 'break-word'
+        }
       }}
     >
-      <Stack gap="xs">
-        <Group justify="space-between" align="center">
-          <Stack gap={2}>
-            <Badge size="xs" color={getGroupColor(area.group)}>
-              {area.group}
-            </Badge>
-            <Text size="sm" fw={500}>
-              {area.line}
+      <Paper
+        p="sm"
+        radius="md"
+        withBorder
+        style={{
+          backgroundColor: area.completed ? '#e8f5e8' : 'white',
+          borderColor: area.completed ? '#4caf50' : '#dee2e6',
+          minHeight: '80px',
+          cursor: 'pointer'
+        }}
+      >
+        <Stack gap="xs">
+          <Group justify="space-between" align="center">
+            <Stack gap={2} style={{ flex: 1 }}>
+              <Badge size="xs" color={getGroupColor(area.group)}>
+                {area.group}
+              </Badge>
+              <Text size="sm" fw={500} lineClamp={2}>
+                {area.line}
+              </Text>
+            </Stack>
+            <Group gap="xs">
+              {area.completed ? (
+                <IconCircleCheck size={20} color="#4caf50" />
+              ) : (
+                <IconCircle size={20} color="#dee2e6" />
+              )}
+            </Group>
+          </Group>
+          
+          {area.selectedCourse && (
+            <Text size="xs" c="green" fw={500} lineClamp={1}>
+              {area.selectedCourse}
             </Text>
-          </Stack>
-          {area.completed && (
-            <IconCheck size={18} color="#4caf50" />
           )}
-        </Group>
-        
-        <Select
-          placeholder="Select course"
-          value={area.selectedCourse || ''}
-          onChange={(value) => value && onCourseSelect(area.line, value)}
-          data={allEligibleCourses.map(course => ({
-            value: course,
-            label: course
-          }))}
-          size="xs"
-        />
-        
-        <Text size="xs" c="dimmed" lineClamp={2}>
-          Basic: {area.basicCourses.slice(0, 2).join(', ')}
-          {area.basicCourses.length > 2 && '...'}
-        </Text>
-      </Stack>
-    </Paper>
+        </Stack>
+      </Paper>
+    </Tooltip>
   );
 };
 
 interface FLMBEPanelProps {
   flmbeRequirements: FLMBEArea[];
-  onCourseSelect: (line: string, courseCode: string) => void;
+  onCourseSelect?: (line: string, courseCode: string) => void;
 }
 
 export const FLMBEPanel: React.FC<FLMBEPanelProps> = ({
