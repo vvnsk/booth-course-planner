@@ -3,12 +3,10 @@ import {
   AppShell, 
   Container, 
   Title, 
-  Group, 
   ScrollArea, 
   Grid, 
   Stack,
-  Paper,
-  Text
+  Paper
 } from '@mantine/core';
 import './App.css';
 
@@ -18,6 +16,7 @@ import { CourseSearch } from './components/CourseSearch';
 import { DegreeRequirementsPanel } from './components/DegreeRequirementsPanel';
 import { FLMBEPanel } from './components/FLMBEPanel';
 import { ConcentrationsPanel } from './components/ConcentrationsPanel';
+import { Navbar } from './components/Navbar';
 
 // Types
 import type { Course, Quarter, FoundationRequirement, FLMBEArea, Concentration } from './types';
@@ -142,25 +141,12 @@ function App() {
     <AppShell padding="md">
       <Container size="100%" p={0}>
         <Stack gap="lg">
-          {/* Header */}
-          <Paper p="md" withBorder>
-            <Group justify="space-between" align="center">
-              <Title order={1} size="h2">
-                🎓 Booth Course Planner
-              </Title>
-              <Group gap="lg">
-                <Text size="sm" c="dimmed">
-                  Total Units: {allSelectedCourses.length * 100}/2000
-                </Text>
-                <Text size="sm" c="dimmed">
-                  Foundation: {foundationRequirements.filter(r => r.completed).length}/3
-                </Text>
-                <Text size="sm" c="dimmed">
-                  FLMBE: {flmbeRequirements.filter(r => r.completed).length}/7
-                </Text>
-              </Group>
-            </Group>
-          </Paper>
+          {/* Navbar */}
+          <Navbar
+            totalUnits={allSelectedCourses.length * 100}
+            foundationCompleted={foundationRequirements.filter(r => r.completed).length}
+            flmbeCompleted={flmbeRequirements.filter(r => r.completed).length}
+          />
 
           {/* Course Catalog - Top Section */}
           <CourseSearch
