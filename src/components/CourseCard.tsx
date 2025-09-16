@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Card, Text, Badge, Group, ActionIcon, Stack } from '@mantine/core';
-import { IconTrash, IconGripVertical, IconPlus } from '@tabler/icons-react';
-import { useMediaQuery } from '@mantine/hooks';
+import { Card, Text, Badge, Group, ActionIcon, Stack, Modal, Title, Divider } from '@mantine/core';
+import { IconTrash, IconGripVertical, IconPlus, IconInfoCircle } from '@tabler/icons-react';
+import { useMediaQuery, useDisclosure } from '@mantine/hooks';
 import type { CourseCardProps } from '../types/index';
 
 // Helper function to aggregate quarters and show typical offering patterns
@@ -66,6 +66,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   showDetails = true
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [opened, { open, close }] = useDisclosure(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const handleDragStart = (e: React.DragEvent) => {
@@ -102,6 +103,17 @@ export const CourseCard: React.FC<CourseCardProps> = ({
           <Stack gap="xs">
             <ActionIcon variant="subtle" color="gray" size="sm">
               <IconGripVertical size={14} />
+            </ActionIcon>
+            <ActionIcon 
+              variant="subtle" 
+              color="blue" 
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                open();
+              }}
+            >
+              <IconInfoCircle size={14} />
             </ActionIcon>
             {onAdd && (
               <ActionIcon
@@ -186,6 +198,81 @@ export const CourseCard: React.FC<CourseCardProps> = ({
           )}
         </Stack>
       </Group>
+      
+      <Modal
+        opened={opened}
+        onClose={close}
+        title={<Title order={3}>{course.code}</Title>}
+        size="md"
+        centered
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
+        styles={{
+          inner: {
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            position: 'fixed',
+            overflow: 'auto'
+          },
+          content: {
+            position: 'relative'
+          }
+        }}
+      >
+        <Stack gap="md">
+          <div>
+            <Title order={4} size="h5" c="blue">
+              {course.title}
+            </Title>
+          </div>
+          
+          <Divider />
+          
+          {course.units && (
+            <Group>
+              <Text fw={500}>Units:</Text>
+              <Badge variant="light" color="gray">
+                {course.units}
+              </Badge>
+            </Group>
+          )}
+          
+          {course.quartersOffered && course.quartersOffered.length > 0 && (
+            <div>
+              <Text fw={500} mb="xs">Quarters Offered:</Text>
+              <Group gap="xs">
+                {getQuarterBadges(course.quartersOffered).map((quarter, index) => (
+                  <Badge key={index} color={getQuarterColor(quarter)}>
+                    {quarter}
+                  </Badge>
+                ))}
+              </Group>
+              <Text size="xs" c="dimmed" mt="xs">
+                Based on historical data: {course.quartersOffered.join(', ')}
+              </Text>
+            </div>
+          )}
+          
+          {course.prerequisites && course.prerequisites.length > 0 && (
+            <div>
+              <Text fw={500} mb="xs">Prerequisites:</Text>
+              <Text c="orange">
+                {course.prerequisites.join(', ')}
+              </Text>
+            </div>
+          )}
+          
+          {course.description && (
+            <div>
+              <Text fw={500} mb="xs">Description:</Text>
+              <Text size="sm">
+                {course.description}
+              </Text>
+            </div>
+          )}
+        </Stack>
+      </Modal>
     </Card>
   );
 };
