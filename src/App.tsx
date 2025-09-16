@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   AppShell, 
   Container, 
@@ -7,7 +7,8 @@ import {
   Grid, 
   Stack,
   Paper,
-  LoadingOverlay
+  LoadingOverlay,
+  Collapse
 } from '@mantine/core';
 import './App.css';
 
@@ -25,6 +26,8 @@ import { Navbar } from './components/Navbar';
 
 // Main App component that uses the context
 const AppContent: React.FC = () => {
+  const [showSettings, setShowSettings] = useState(false);
+  
   const {
     quarters,
     foundationRequirements,
@@ -61,7 +64,14 @@ const AppContent: React.FC = () => {
             totalUnits={allSelectedCourses.length * 100}
             foundationCompleted={foundationRequirements.filter(r => r.completed).length}
             flmbeCompleted={flmbeRequirements.filter(r => r.completed).length}
+            onSettingsClick={() => setShowSettings(!showSettings)}
+            showSettings={showSettings}
           />
+
+          {/* Quarter Configuration - Collapsible */}
+          <Collapse in={showSettings}>
+            <QuarterConfig />
+          </Collapse>
 
           {/* Course Catalog - Top Section */}
           <CourseSearch />
@@ -69,29 +79,23 @@ const AppContent: React.FC = () => {
           <Grid>
             {/* Left Column - Quarters */}
             <Grid.Col span={6}>
-              <Stack gap="md">
-                {/* Quarter Configuration */}
-                <QuarterConfig />
-                
-                {/* Quarterly Schedule */}
-                <Paper p="md" withBorder style={{ backgroundColor: '#f8f9fa' }}>
-                  <Title order={3} mb="md">Quarterly Schedule</Title>
-                  <ScrollArea>
-                    <Stack gap="md">
-                      {quarters.map((quarter) => (
-                        <QuarterColumn
-                          key={quarter.id}
-                          quarter={quarter}
-                          onAddCourse={(course) => addCourseToQuarter(quarter.id, course)}
-                          onRemoveCourse={(courseCode) => removeCourseFromQuarter(quarter.id, courseCode)}
-                          onDropCourse={(course) => addCourseToQuarter(quarter.id, course)}
-                          onDeleteQuarter={deleteQuarter}
-                        />
-                      ))}
-                    </Stack>
-                  </ScrollArea>
-                </Paper>
-              </Stack>
+              <Paper p="md" withBorder style={{ backgroundColor: '#f8f9fa' }}>
+                <Title order={3} mb="md">Quarterly Schedule</Title>
+                <ScrollArea>
+                  <Stack gap="md">
+                    {quarters.map((quarter) => (
+                      <QuarterColumn
+                        key={quarter.id}
+                        quarter={quarter}
+                        onAddCourse={(course) => addCourseToQuarter(quarter.id, course)}
+                        onRemoveCourse={(courseCode) => removeCourseFromQuarter(quarter.id, courseCode)}
+                        onDropCourse={(course) => addCourseToQuarter(quarter.id, course)}
+                        onDeleteQuarter={deleteQuarter}
+                      />
+                    ))}
+                  </Stack>
+                </ScrollArea>
+              </Paper>
             </Grid.Col>
 
             {/* Right Column - Requirements */}
