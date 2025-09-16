@@ -1,6 +1,6 @@
-import React from 'react';
-import { Paper, Text, Stack, Group, Progress, Tooltip } from '@mantine/core';
-import { IconCheck, IconCircle, IconCircleCheck } from '@tabler/icons-react';
+import React, { useState } from 'react';
+import { Paper, Text, Stack, Group, Progress, Tooltip, ActionIcon, Collapse } from '@mantine/core';
+import { IconCheck, IconCircle, IconCircleCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import type { FoundationRequirement } from '../types/index';
 
 interface RequirementBoxProps {
@@ -90,6 +90,7 @@ export const DegreeRequirementsPanel: React.FC<DegreeRequirementsPanelProps> = (
   foundationRequirements,
   onCourseSelect
 }) => {
+  const [isExpanded, setIsExpanded] = useState(true);
   const completedCount = foundationRequirements.filter(req => req.completed).length;
   const totalCount = foundationRequirements.length;
   const progressPercent = (completedCount / totalCount) * 100;
@@ -107,9 +108,19 @@ export const DegreeRequirementsPanel: React.FC<DegreeRequirementsPanelProps> = (
           <Text size="lg" fw={600}>
             Degree Requirements
           </Text>
-          <Text size="sm" c="dimmed">
-            {completedCount}/{totalCount} completed
-          </Text>
+          <Group gap="xs">
+            <Text size="sm" c="dimmed">
+              {completedCount}/{totalCount} completed
+            </Text>
+            <ActionIcon
+              variant="light"
+              color="gray"
+              size="sm"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              {isExpanded ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+            </ActionIcon>
+          </Group>
         </Group>
         
         <Progress
@@ -119,19 +130,23 @@ export const DegreeRequirementsPanel: React.FC<DegreeRequirementsPanelProps> = (
           radius="xl"
         />
         
-        <Text size="md" fw={500} mt="md">
-          Foundation ({completedCount}/{totalCount})
-        </Text>
-        
-        <Group grow align="stretch">
-          {foundationRequirements.map((requirement) => (
-            <RequirementBox
-              key={requirement.area}
-              requirement={requirement}
-              onCourseSelect={onCourseSelect}
-            />
-          ))}
-        </Group>
+        <Collapse in={isExpanded}>
+          <Stack gap="md">
+            <Text size="md" fw={500} mt="md">
+              Foundation ({completedCount}/{totalCount})
+            </Text>
+            
+            <Group grow align="stretch">
+              {foundationRequirements.map((requirement) => (
+                <RequirementBox
+                  key={requirement.area}
+                  requirement={requirement}
+                  onCourseSelect={onCourseSelect}
+                />
+              ))}
+            </Group>
+          </Stack>
+        </Collapse>
       </Stack>
     </Paper>
   );

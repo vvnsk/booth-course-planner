@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Paper, Text, Stack, Group, Badge, ActionIcon, ScrollArea } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
+import { Paper, Text, Stack, Group, Badge, ScrollArea, ActionIcon, Collapse } from '@mantine/core';
+import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { CourseCard } from './CourseCard';
 import type { QuarterColumnProps } from '../types/index';
 
@@ -11,6 +11,7 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
   onDropCourse
 }) => {
   const [isDropZoneActive, setIsDropZoneActive] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const totalUnits = quarter.courses.reduce((sum, course) => sum + (course.units || 100), 0);
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -51,7 +52,7 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       style={{
-        minHeight: '150px',
+        minHeight: '70px',
         width: '100%',
         backgroundColor: isDropZoneActive ? '#e3f2fd' : '#f8f9fa',
         border: isDropZoneActive ? '2px solid #2196f3' : '1px solid #dee2e6',
@@ -76,58 +77,57 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
             </Badge>
             <ActionIcon
               variant="light"
-              color="green"
+              color="gray"
               size="sm"
-              onClick={() => {
-                // TODO: Open course selection modal
-                console.log('Add course to', quarter.name);
-              }}
+              onClick={() => setIsExpanded(!isExpanded)}
             >
-              <IconPlus size={16} />
+              {isExpanded ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
             </ActionIcon>
           </Group>
         </Group>
         
         {/* Course List */}
-        <ScrollArea scrollbars="x" style={{ minHeight: '80px' }}>
-          {quarter.courses.length === 0 ? (
-            <Paper
-              p="lg"
-              radius="md"
-              style={{
-                border: isDropZoneActive ? '2px solid #2196f3' : '2px dashed #ced4da',
-                backgroundColor: isDropZoneActive ? '#e3f2fd' : 'white',
-                textAlign: 'center',
-                minHeight: '80px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              <Text 
-                size="sm" 
-                c={isDropZoneActive ? 'blue' : 'dimmed'}
-                fw={isDropZoneActive ? 600 : 400}
+        <Collapse in={isExpanded}>
+          <ScrollArea scrollbars="x" style={{ minHeight: '80px' }}>
+            {quarter.courses.length === 0 ? (
+              <Paper
+                p="lg"
+                radius="md"
+                style={{
+                  border: isDropZoneActive ? '2px solid #2196f3' : '2px dashed #ced4da',
+                  backgroundColor: isDropZoneActive ? '#e3f2fd' : 'white',
+                  textAlign: 'center',
+                  minHeight: '80px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s ease'
+                }}
               >
-                {isDropZoneActive ? 'Drop course here' : 'Drop courses here or click + to add'}
-              </Text>
-            </Paper>
-          ) : (
-            <Group gap="xs" wrap="nowrap" style={{ minWidth: 'fit-content' }}>
-              {quarter.courses.map((course, index) => (
-                <div key={`${course.code}-${index}`} style={{ minWidth: '200px' }}>
-                  <CourseCard
-                    course={course}
-                    onRemove={() => onRemoveCourse(course.code)}
-                    isDraggable={true}
-                    showDetails={false}
-                  />
-                </div>
-              ))}
-            </Group>
-          )}
-        </ScrollArea>
+                <Text 
+                  size="sm" 
+                  c={isDropZoneActive ? 'blue' : 'dimmed'}
+                  fw={isDropZoneActive ? 600 : 400}
+                >
+                  {isDropZoneActive ? 'Drop course here' : 'Drop courses here'}
+                </Text>
+              </Paper>
+            ) : (
+              <Group gap="xs" wrap="nowrap" style={{ minWidth: 'fit-content' }}>
+                {quarter.courses.map((course, index) => (
+                  <div key={`${course.code}-${index}`} style={{ minWidth: '200px' }}>
+                    <CourseCard
+                      course={course}
+                      onRemove={() => onRemoveCourse(course.code)}
+                      isDraggable={true}
+                      showDetails={false}
+                    />
+                  </div>
+                ))}
+              </Group>
+            )}
+          </ScrollArea>
+        </Collapse>
       </Stack>
     </Paper>
   );

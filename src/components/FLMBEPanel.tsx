@@ -1,6 +1,6 @@
-import React from 'react';
-import { Paper, Text, Stack, Group, Progress, SimpleGrid, Badge, Tooltip } from '@mantine/core';
-import { IconCheck, IconCircle, IconCircleCheck } from '@tabler/icons-react';
+import React, { useState } from 'react';
+import { Paper, Text, Stack, Group, Progress, SimpleGrid, Badge, Tooltip, ActionIcon, Collapse } from '@mantine/core';
+import { IconCheck, IconCircle, IconCircleCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import type { FLMBEArea } from '../types/index';
 
 interface FLMBEBoxProps {
@@ -106,6 +106,7 @@ export const FLMBEPanel: React.FC<FLMBEPanelProps> = ({
   flmbeRequirements,
   onCourseSelect
 }) => {
+  const [isExpanded, setIsExpanded] = useState(true);
   const completedCount = flmbeRequirements.filter(req => req.completed).length;
   const requiredCount = 7; // Need 7 out of 8 areas
   const progressPercent = Math.min((completedCount / requiredCount) * 100, 100);
@@ -128,9 +129,19 @@ export const FLMBEPanel: React.FC<FLMBEPanelProps> = ({
           <Text size="lg" fw={600}>
             FLMBE Requirements
           </Text>
-          <Text size="sm" c="dimmed">
-            {completedCount}/{requiredCount} completed (7 of 8 required)
-          </Text>
+          <Group gap="xs">
+            <Text size="sm" c="dimmed">
+              {completedCount}/{requiredCount} completed (7 of 8 required)
+            </Text>
+            <ActionIcon
+              variant="light"
+              color="gray"
+              size="sm"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              {isExpanded ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+            </ActionIcon>
+          </Group>
         </Group>
         
         <Progress
@@ -140,53 +151,57 @@ export const FLMBEPanel: React.FC<FLMBEPanelProps> = ({
           radius="xl"
         />
         
-        {/* Functions */}
-        <Stack gap="sm">
-          <Text size="md" fw={500} c="blue">
-            Functions ({functions.filter(f => f.completed).length}/{functions.length})
-          </Text>
-          <SimpleGrid cols={2} spacing="sm">
-            {functions.map((area) => (
-              <FLMBEBox
-                key={area.line}
-                area={area}
-                onCourseSelect={onCourseSelect}
-              />
-            ))}
-          </SimpleGrid>
-        </Stack>
-        
-        {/* Leadership & Management */}
-        <Stack gap="sm">
-          <Text size="md" fw={500} c="green">
-            Leadership & Management ({leadership.filter(l => l.completed).length}/{leadership.length})
-          </Text>
-          <SimpleGrid cols={2} spacing="sm">
-            {leadership.map((area) => (
-              <FLMBEBox
-                key={area.line}
-                area={area}
-                onCourseSelect={onCourseSelect}
-              />
-            ))}
-          </SimpleGrid>
-        </Stack>
-        
-        {/* Business Environment */}
-        <Stack gap="sm">
-          <Text size="md" fw={500} c="orange">
-            Business Environment ({environment.filter(e => e.completed).length}/{environment.length})
-          </Text>
-          <SimpleGrid cols={2} spacing="sm">
-            {environment.map((area) => (
-              <FLMBEBox
-                key={area.line}
-                area={area}
-                onCourseSelect={onCourseSelect}
-              />
-            ))}
-          </SimpleGrid>
-        </Stack>
+        <Collapse in={isExpanded}>
+          <Stack gap="md">
+            {/* Functions */}
+            <Stack gap="sm">
+              <Text size="md" fw={500} c="blue">
+                Functions ({functions.filter(f => f.completed).length}/{functions.length})
+              </Text>
+              <SimpleGrid cols={2} spacing="sm">
+                {functions.map((area) => (
+                  <FLMBEBox
+                    key={area.line}
+                    area={area}
+                    onCourseSelect={onCourseSelect}
+                  />
+                ))}
+              </SimpleGrid>
+            </Stack>
+            
+            {/* Leadership & Management */}
+            <Stack gap="sm">
+              <Text size="md" fw={500} c="green">
+                Leadership & Management ({leadership.filter(l => l.completed).length}/{leadership.length})
+              </Text>
+              <SimpleGrid cols={2} spacing="sm">
+                {leadership.map((area) => (
+                  <FLMBEBox
+                    key={area.line}
+                    area={area}
+                    onCourseSelect={onCourseSelect}
+                  />
+                ))}
+              </SimpleGrid>
+            </Stack>
+            
+            {/* Business Environment */}
+            <Stack gap="sm">
+              <Text size="md" fw={500} c="orange">
+                Business Environment ({environment.filter(e => e.completed).length}/{environment.length})
+              </Text>
+              <SimpleGrid cols={2} spacing="sm">
+                {environment.map((area) => (
+                  <FLMBEBox
+                    key={area.line}
+                    area={area}
+                    onCourseSelect={onCourseSelect}
+                  />
+                ))}
+              </SimpleGrid>
+            </Stack>
+          </Stack>
+        </Collapse>
       </Stack>
     </Paper>
   );

@@ -1,6 +1,6 @@
-import React from 'react';
-import { Paper, Text, Stack, Group, Progress, Badge, SimpleGrid, Accordion, Tooltip } from '@mantine/core';
-import { IconCheck, IconTarget, IconCircle, IconCircleCheck } from '@tabler/icons-react';
+import React, { useState } from 'react';
+import { Paper, Text, Stack, Group, Progress, Badge, SimpleGrid, Accordion, Tooltip, ActionIcon, Collapse } from '@mantine/core';
+import { IconCheck, IconTarget, IconCircle, IconCircleCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import type { Concentration, ConcentrationRequirement } from '../types/index';
 
 interface ConcentrationRequirementBoxProps {
@@ -189,6 +189,7 @@ export const ConcentrationsPanel: React.FC<ConcentrationsPanelProps> = ({
   onToggleConcentration,
   onCourseAdd
 }) => {
+  const [isExpanded, setIsExpanded] = useState(true);
   const selectedConcentrationObjects = concentrations.filter(c => 
     selectedConcentrations.includes(c.name)
   );
@@ -208,56 +209,70 @@ export const ConcentrationsPanel: React.FC<ConcentrationsPanelProps> = ({
           <Text size="lg" fw={600}>
             Concentrations
           </Text>
-          <Text size="sm" c="dimmed">
-            {completedCount}/{selectedConcentrations.length} completed
-          </Text>
+          <Group gap="xs">
+            <Text size="sm" c="dimmed">
+              {completedCount}/{selectedConcentrations.length} completed
+            </Text>
+            <ActionIcon
+              variant="light"
+              color="gray"
+              size="sm"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              {isExpanded ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+            </ActionIcon>
+          </Group>
         </Group>
         
-        <Text size="sm" c="dimmed">
-          Click to select/deselect concentrations. You can pursue multiple concentrations.
-        </Text>
-        
-        <Accordion variant="separated" radius="md">
-          <Accordion.Item value="available">
-            <Accordion.Control>
-              <Text fw={500}>Available Concentrations ({concentrations.length})</Text>
-            </Accordion.Control>
-            <Accordion.Panel>
-              <SimpleGrid cols={2} spacing="sm">
-                {concentrations.slice(0, 8).map((concentration) => (
-                  <ConcentrationCard
-                    key={concentration.name}
-                    concentration={concentration}
-                    isSelected={selectedConcentrations.includes(concentration.name)}
-                    onToggleSelection={onToggleConcentration}
-                    onCourseAdd={onCourseAdd}
-                  />
-                ))}
-              </SimpleGrid>
-            </Accordion.Panel>
-          </Accordion.Item>
-          
-          {selectedConcentrations.length > 0 && (
-            <Accordion.Item value="selected">
-              <Accordion.Control>
-                <Text fw={500}>Selected Concentrations ({selectedConcentrations.length})</Text>
-              </Accordion.Control>
-              <Accordion.Panel>
-                <Stack gap="md">
-                  {selectedConcentrationObjects.map((concentration) => (
-                    <ConcentrationCard
-                      key={concentration.name}
-                      concentration={concentration}
-                      isSelected={true}
-                      onToggleSelection={onToggleConcentration}
-                      onCourseAdd={onCourseAdd}
-                    />
-                  ))}
-                </Stack>
-              </Accordion.Panel>
-            </Accordion.Item>
-          )}
-        </Accordion>
+        <Collapse in={isExpanded}>
+          <Stack gap="md">
+            <Text size="sm" c="dimmed">
+              Click to select/deselect concentrations. You can pursue multiple concentrations.
+            </Text>
+            
+            <Accordion variant="separated" radius="md">
+              <Accordion.Item value="available">
+                <Accordion.Control>
+                  <Text fw={500}>Available Concentrations ({concentrations.length})</Text>
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <SimpleGrid cols={2} spacing="sm">
+                    {concentrations.slice(0, 8).map((concentration) => (
+                      <ConcentrationCard
+                        key={concentration.name}
+                        concentration={concentration}
+                        isSelected={selectedConcentrations.includes(concentration.name)}
+                        onToggleSelection={onToggleConcentration}
+                        onCourseAdd={onCourseAdd}
+                      />
+                    ))}
+                  </SimpleGrid>
+                </Accordion.Panel>
+              </Accordion.Item>
+              
+              {selectedConcentrations.length > 0 && (
+                <Accordion.Item value="selected">
+                  <Accordion.Control>
+                    <Text fw={500}>Selected Concentrations ({selectedConcentrations.length})</Text>
+                  </Accordion.Control>
+                  <Accordion.Panel>
+                    <Stack gap="md">
+                      {selectedConcentrationObjects.map((concentration) => (
+                        <ConcentrationCard
+                          key={concentration.name}
+                          concentration={concentration}
+                          isSelected={true}
+                          onToggleSelection={onToggleConcentration}
+                          onCourseAdd={onCourseAdd}
+                        />
+                      ))}
+                    </Stack>
+                  </Accordion.Panel>
+                </Accordion.Item>
+              )}
+            </Accordion>
+          </Stack>
+        </Collapse>
       </Stack>
     </Paper>
   );
