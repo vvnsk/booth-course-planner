@@ -8,7 +8,10 @@ import {
   Stack,
   Paper,
   LoadingOverlay,
-  Collapse
+  Collapse,
+  Text,
+  Anchor,
+  Center
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import './App.css';
@@ -115,6 +118,40 @@ const AppContent: React.FC = () => {
               </Stack>
             </Grid.Col>
           </Grid>
+
+          {/* Footer */}
+          <Paper p="md" withBorder style={{ backgroundColor: '#f8f9fa', marginTop: 'auto' }}>
+            <Center>
+              <Stack gap="xs" align="center">
+                <Text size="sm" c="dimmed">
+                  © {new Date().getFullYear()}{' '}
+                  <Anchor 
+                    href="https://vinnakota.me/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    c="blue"
+                    td="none"
+                    style={{ fontWeight: 500 }}
+                  >
+                    Sai Krishna Vinnakota
+                  </Anchor>
+                  . All rights reserved.
+                </Text>
+                <Text size="xs" c="dimmed">
+                  Notice data inconsistencies or bugs? Report them at{' '}
+                  <Anchor 
+                    href="https://github.com/vvnsk/booth-course-planner/issues" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    c="blue"
+                    td="none"
+                  >
+                    https://github.com/vvnsk/booth-course-planner/issues
+                  </Anchor>
+                </Text>
+              </Stack>
+            </Center>
+          </Paper>
         </Stack>
       </Container>
     </AppShell>

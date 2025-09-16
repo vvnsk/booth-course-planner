@@ -112,16 +112,14 @@ export const updateFoundationProgress = (
 ): FoundationRequirement[] => {
   return requirements.map(req => {
     const eligibleCourses = [...req.basicCourses, ...req.approvedSubstitutes];
-    const hasCompletedCourse = allCourses.some(course => 
+    const completedCourse = allCourses.find(course => 
       eligibleCourses.includes(course.code)
     );
     
     return {
       ...req,
-      completed: hasCompletedCourse,
-      selectedCourse: hasCompletedCourse 
-        ? allCourses.find(course => eligibleCourses.includes(course.code))?.code
-        : req.selectedCourse
+      completed: !!completedCourse,
+      selectedCourse: completedCourse?.code || undefined
     };
   });
 };
@@ -132,16 +130,14 @@ export const updateFLMBEProgress = (
 ): FLMBEArea[] => {
   return requirements.map(req => {
     const eligibleCourses = [...req.basicCourses, ...req.approvedSubstitutes];
-    const hasCompletedCourse = allCourses.some(course => 
+    const completedCourse = allCourses.find(course => 
       eligibleCourses.includes(course.code)
     );
     
     return {
       ...req,
-      completed: hasCompletedCourse,
-      selectedCourse: hasCompletedCourse 
-        ? allCourses.find(course => eligibleCourses.includes(course.code))?.code
-        : req.selectedCourse
+      completed: !!completedCourse,
+      selectedCourse: completedCourse?.code || undefined
     };
   });
 };
