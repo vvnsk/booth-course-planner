@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Paper, TextInput, Stack, ScrollArea, Group, Badge, ActionIcon, Divider, Text } from '@mantine/core';
 import { IconSearch, IconFilter } from '@tabler/icons-react';
+import { useMediaQuery } from '@mantine/hooks';
 import { CourseCard } from './CourseCard';
 import { usePlanner } from '../contexts/PlannerContext';
 
@@ -20,6 +21,8 @@ export const CourseSearch: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(0); // Force re-render mechanism
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isTablet = useMediaQuery('(max-width: 1024px)');
 
   // Debug function to log course categorization
   const debugCategorization = () => {
@@ -140,37 +143,41 @@ export const CourseSearch: React.FC = () => {
     <Paper
       shadow="sm"
       radius="md"
-      p="md"
+      p={isMobile ? "sm" : "md"}
       withBorder
       style={{
         height: '100%',
+        overflow: 'auto',
+        maxHeight: isMobile ? '350px' : isTablet ? '500px' : '600px',
         backgroundColor: '#f8f9fa'
       }}
     >
-      <Stack gap="md" style={{ height: '100%' }}>
+      <Stack gap={isMobile ? "sm" : "md"} style={{ height: '100%' }}>
         
         {/* Search Row */}
-        <Group gap="sm" wrap="nowrap">
+        <Group gap="sm" wrap={isMobile ? "wrap" : "nowrap"}>
           <TextInput
-            placeholder="Search courses by code or title..."
+            placeholder={isMobile ? "Search courses..." : "Search courses by code or title..."}
             leftSection={<IconSearch size={16} />}
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.currentTarget.value)}
             size="sm"
-            style={{ flex: 1, minWidth: '200px' }}
+            style={{ flex: 1, minWidth: isMobile ? '100%' : '200px' }}
           />
-          <Badge variant="light" color="blue">
-            {filteredCourses.length} courses
-          </Badge>
-          <ActionIcon
-            variant="light"
-            color="gray"
-            size="lg"
-            onClick={() => setShowFilters(!showFilters)}
-            style={{ cursor: 'pointer' }}
-          >
-            <IconFilter size={18} />
-          </ActionIcon>
+          <Group gap="xs" wrap="nowrap">
+            <Badge variant="light" color="blue" size={isMobile ? "xs" : "sm"}>
+              {filteredCourses.length} courses
+            </Badge>
+            <ActionIcon
+              variant="light"
+              color="gray"
+              size={isMobile ? "md" : "lg"}
+              onClick={() => setShowFilters(!showFilters)}
+              style={{ cursor: 'pointer' }}
+            >
+              <IconFilter size={isMobile ? 16 : 18} />
+            </ActionIcon>
+          </Group>
         </Group>
 
         {/* Filter Badges (collapsible) */}
@@ -179,6 +186,7 @@ export const CourseSearch: React.FC = () => {
             <Badge
               variant={selectedFilter === 'all' ? 'filled' : 'light'}
               color="blue"
+              size={isMobile ? "xs" : "sm"}
               style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
               onClick={() => handleFilterChange('all')}
             >
@@ -187,6 +195,7 @@ export const CourseSearch: React.FC = () => {
             <Badge
               variant={selectedFilter === 'foundation' ? 'filled' : 'light'}
               color="green"
+              size={isMobile ? "xs" : "sm"}
               style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
               onClick={() => handleFilterChange('foundation')}
             >
@@ -195,6 +204,7 @@ export const CourseSearch: React.FC = () => {
             <Badge
               variant={selectedFilter === 'flmbe' ? 'filled' : 'light'}
               color="orange"
+              size={isMobile ? "xs" : "sm"}
               style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
               onClick={() => handleFilterChange('flmbe')}
             >
@@ -205,15 +215,17 @@ export const CourseSearch: React.FC = () => {
                 key={concentration}
                 variant={selectedFilter === concentration ? 'filled' : 'light'}
                 color="purple"
+                size={isMobile ? "xs" : "sm"}
                 style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
                 onClick={() => handleFilterChange(concentration)}
               >
-                {getConcentrationDisplayName(concentration)}
+                {isMobile ? concentration.slice(0, 8) + (concentration.length > 8 ? '...' : '') : getConcentrationDisplayName(concentration)}
               </Badge>
             ))}
             <Badge
               variant={selectedFilter === 'other' ? 'filled' : 'light'}
               color="gray"
+              size={isMobile ? "xs" : "sm"}
               style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
               onClick={() => handleFilterChange('other')}
             >
@@ -226,18 +238,18 @@ export const CourseSearch: React.FC = () => {
         
         {/* Course List */}
         <ScrollArea style={{ flex: 1 }} scrollbars="x">
-          <Group gap="md" wrap="nowrap" style={{ minWidth: 'fit-content' }}>
+          <Group gap={isMobile ? "sm" : "md"} wrap={isMobile ? "wrap" : "nowrap"} style={{ minWidth: isMobile ? 'auto' : 'fit-content' }}>
             {filteredCourses.length === 0 ? (
-              <Text size="sm" c="dimmed" ta="center" p="xl" style={{ width: '100%' }}>
+              <Text size="sm" c="dimmed" ta="center" p={isMobile ? "md" : "xl"} style={{ width: '100%' }}>
                 No courses found matching your criteria
               </Text>
             ) : (
               filteredCourses.map((course, index) => (
-                <div key={`${course.code}-${index}-${course.title?.slice(0, 10) || ''}`} style={{ minWidth: '250px' }}>
+                <div key={`${course.code}-${index}-${course.title?.slice(0, 10) || ''}`} style={{ minWidth: isMobile ? '100%' : '250px' }}>
                   <CourseCard
                     course={course}
                     isDraggable={true}
-                    showDetails={true}
+                    showDetails={!isMobile}
                     onAdd={() => handleAddCourse(course)}
                   />
                 </div>

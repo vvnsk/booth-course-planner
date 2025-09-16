@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Paper, Text, Stack, Group, Badge, ScrollArea, ActionIcon, Collapse } from '@mantine/core';
 import { IconChevronDown, IconChevronUp, IconTrash } from '@tabler/icons-react';
+import { useMediaQuery } from '@mantine/hooks';
 import { CourseCard } from './CourseCard';
 import type { QuarterColumnProps } from '../types/index';
 
@@ -13,6 +14,7 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
 }) => {
   const [isDropZoneActive, setIsDropZoneActive] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const totalUnits = quarter.courses.reduce((sum, course) => sum + (course.units || 100), 0);
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -47,7 +49,7 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
     <Paper
       shadow="sm"
       radius="md"
-      p="md"
+      p={isMobile ? "sm" : "md"}
       withBorder
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -64,7 +66,7 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
         {/* Quarter Header */}
         <Group justify="space-between" align="center">
           <Stack gap={2}>
-            <Text size="sm" fw={600}>
+            <Text size={isMobile ? "xs" : "sm"} fw={600}>
               {quarter.season} {quarter.year}
             </Text>
             <Text size="xs" c="dimmed">
@@ -73,41 +75,41 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
           </Stack>
           
           <Group gap="xs">
-            <Badge size="sm" variant="light" color="blue">
+            <Badge size={isMobile ? "xs" : "sm"} variant="light" color="blue">
               {totalUnits} units
             </Badge>
             <ActionIcon
               variant="light"
               color="red"
-              size="sm"
+              size={isMobile ? "xs" : "sm"}
               onClick={() => onDeleteQuarter?.(quarter.id)}
               title="Delete Quarter"
             >
-              <IconTrash size={16} />
+              <IconTrash size={isMobile ? 14 : 16} />
             </ActionIcon>
             <ActionIcon
               variant="light"
               color="gray"
-              size="sm"
+              size={isMobile ? "xs" : "sm"}
               onClick={() => setIsExpanded(!isExpanded)}
             >
-              {isExpanded ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+              {isExpanded ? <IconChevronUp size={isMobile ? 14 : 16} /> : <IconChevronDown size={isMobile ? 14 : 16} />}
             </ActionIcon>
           </Group>
         </Group>
         
         {/* Course List */}
         <Collapse in={isExpanded}>
-          <ScrollArea scrollbars="x" style={{ minHeight: '80px' }}>
+          <ScrollArea scrollbars="x" style={{ minHeight: isMobile ? '60px' : '80px' }}>
             {quarter.courses.length === 0 ? (
               <Paper
-                p="lg"
+                p={isMobile ? "md" : "lg"}
                 radius="md"
                 style={{
                   border: isDropZoneActive ? '2px solid #2196f3' : '2px dashed #ced4da',
                   backgroundColor: isDropZoneActive ? '#e3f2fd' : 'white',
                   textAlign: 'center',
-                  minHeight: '80px',
+                  minHeight: isMobile ? '60px' : '80px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -123,9 +125,9 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
                 </Text>
               </Paper>
             ) : (
-              <Group gap="xs" wrap="nowrap" style={{ minWidth: 'fit-content' }}>
+              <Group gap="xs" wrap={isMobile ? "wrap" : "nowrap"} style={{ minWidth: isMobile ? 'auto' : 'fit-content' }}>
                 {quarter.courses.map((course, index) => (
-                  <div key={`${course.code}-${index}`} style={{ minWidth: '200px' }}>
+                  <div key={`${course.code}-${index}`} style={{ minWidth: isMobile ? '100%' : '200px' }}>
                     <CourseCard
                       course={course}
                       onRemove={() => onRemoveCourse(course.code)}

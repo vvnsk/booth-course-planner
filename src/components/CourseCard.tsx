@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Text, Badge, Group, ActionIcon, Stack, Rating } from '@mantine/core';
 import { IconTrash, IconGripVertical, IconPlus } from '@tabler/icons-react';
+import { useMediaQuery } from '@mantine/hooks';
 import type { CourseCardProps } from '../types/index';
 
 export const CourseCard: React.FC<CourseCardProps> = ({
@@ -11,6 +12,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   showDetails = true
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const handleDragStart = (e: React.DragEvent) => {
     if (!isDraggable) return;
@@ -28,7 +30,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   return (
     <Card
       shadow="sm"
-      padding="xs"
+      padding={isMobile ? "xs" : "xs"}
       radius="md"
       withBorder
       draggable={isDraggable}
@@ -36,21 +38,21 @@ export const CourseCard: React.FC<CourseCardProps> = ({
       onDragEnd={handleDragEnd}
       style={{
         cursor: isDraggable ? (isDragging ? 'grabbing' : 'grab') : 'default',
-        minHeight: '80px',
+        minHeight: isMobile ? '60px' : '80px',
         opacity: isDragging ? 0.5 : 1,
         transition: 'opacity 0.2s ease'
       }}
     >
-      <Group justify="space-between" align="flex-start" gap="xs">
-        {isDraggable && (
+      <Group justify="space-between" align="flex-start" gap={isMobile ? "xs" : "xs"}>
+        {isDraggable && !isMobile && (
           <ActionIcon variant="subtle" color="gray" size="sm">
-            <IconGripVertical size={16} />
+            <IconGripVertical size={14} />
           </ActionIcon>
         )}
         
-        <Stack gap={4} style={{ flex: 1, minWidth: 0 }}>
+        <Stack gap={isMobile ? 2 : 4} style={{ flex: 1, minWidth: 0 }}>
           <Group justify="space-between" align="flex-start">
-            <Text size="sm" fw={600} c="blue" truncate>
+            <Text size={isMobile ? "xs" : "sm"} fw={600} c="blue" truncate>
               {course.code}
             </Text>
             {course.units && (
@@ -60,11 +62,11 @@ export const CourseCard: React.FC<CourseCardProps> = ({
             )}
           </Group>
           
-          <Text size="xs" c="dimmed" lineClamp={2}>
+          <Text size="xs" c="dimmed" lineClamp={isMobile ? 1 : 2}>
             {course.title}
           </Text>
           
-          {showDetails && (
+          {showDetails && !isMobile && (
             <Group gap="xs" mt={4}>
               {course.rating && (
                 <Group gap={4}>
@@ -84,7 +86,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
             </Group>
           )}
           
-          {course.prerequisites && course.prerequisites.length > 0 && (
+          {course.prerequisites && course.prerequisites.length > 0 && !isMobile && (
             <Text size="xs" c="orange">
               Prereq: {course.prerequisites.join(', ')}
             </Text>
@@ -96,10 +98,10 @@ export const CourseCard: React.FC<CourseCardProps> = ({
             <ActionIcon
               variant="subtle"
               color="green"
-              size="sm"
+              size={isMobile ? "xs" : "sm"}
               onClick={onAdd}
             >
-              <IconPlus size={16} />
+              <IconPlus size={isMobile ? 14 : 16} />
             </ActionIcon>
           )}
           
@@ -107,10 +109,10 @@ export const CourseCard: React.FC<CourseCardProps> = ({
             <ActionIcon
               variant="subtle"
               color="red"
-              size="sm"
+              size={isMobile ? "xs" : "sm"}
               onClick={onRemove}
             >
-              <IconTrash size={16} />
+              <IconTrash size={isMobile ? 14 : 16} />
             </ActionIcon>
           )}
         </Stack>

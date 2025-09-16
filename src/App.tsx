@@ -10,6 +10,7 @@ import {
   LoadingOverlay,
   Collapse
 } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import './App.css';
 
 // Context
@@ -27,6 +28,7 @@ import { Navbar } from './components/Navbar';
 // Main App component that uses the context
 const AppContent: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 768px)');
   
   const {
     quarters,
@@ -58,9 +60,9 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <AppShell padding="md">
+    <AppShell padding={isMobile ? "xs" : "md"}>
       <Container size="100%" p={0}>
-        <Stack gap="lg">
+        <Stack gap={isMobile ? "md" : "lg"}>
           {/* Navbar */}
           <Navbar
             totalUnits={allSelectedCourses.length * 100}
@@ -82,8 +84,8 @@ const AppContent: React.FC = () => {
 
           <Grid>
             {/* Left Column - Quarters */}
-            <Grid.Col span={6}>
-              <Paper p="md" withBorder style={{ backgroundColor: '#f8f9fa' }}>
+            <Grid.Col span={{ base: 12, md: 6 }}>
+              <Paper p={isMobile ? "sm" : "md"} withBorder style={{ backgroundColor: '#f8f9fa' }}>
                 <Title order={3} mb="md">Quarterly Schedule</Title>
                 <ScrollArea>
                   <Stack gap="md">
@@ -103,7 +105,7 @@ const AppContent: React.FC = () => {
             </Grid.Col>
 
             {/* Right Column - Requirements */}
-            <Grid.Col span={6}>
+            <Grid.Col span={{ base: 12, md: 6 }}>
               <Stack gap="md">
                 <DegreeRequirementsPanel />
                 
