@@ -86,6 +86,7 @@ export interface QuarterColumnProps {
   onAddCourse: (course: Course) => void;
   onRemoveCourse: (courseCode: string) => void;
   onDropCourse: (course: Course) => void;
+  onDeleteQuarter?: (quarterId: string) => void;
 }
 
 export interface RequirementBoxProps {

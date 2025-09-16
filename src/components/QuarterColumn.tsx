@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Paper, Text, Stack, Group, Badge, ScrollArea, ActionIcon, Collapse } from '@mantine/core';
-import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import { IconChevronDown, IconChevronUp, IconTrash } from '@tabler/icons-react';
 import { CourseCard } from './CourseCard';
 import type { QuarterColumnProps } from '../types/index';
 
@@ -8,7 +8,8 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
   quarter,
   onAddCourse,
   onRemoveCourse,
-  onDropCourse
+  onDropCourse,
+  onDeleteQuarter
 }) => {
   const [isDropZoneActive, setIsDropZoneActive] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
@@ -75,6 +76,15 @@ export const QuarterColumn: React.FC<QuarterColumnProps> = ({
             <Badge size="sm" variant="light" color="blue">
               {totalUnits} units
             </Badge>
+            <ActionIcon
+              variant="light"
+              color="red"
+              size="sm"
+              onClick={() => onDeleteQuarter?.(quarter.id)}
+              title="Delete Quarter"
+            >
+              <IconTrash size={16} />
+            </ActionIcon>
             <ActionIcon
               variant="light"
               color="gray"

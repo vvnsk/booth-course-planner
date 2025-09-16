@@ -16,6 +16,7 @@ import { PlannerProvider, usePlanner } from './contexts/PlannerContext';
 
 // Components
 import { QuarterColumn } from './components/QuarterColumn';
+import { QuarterConfig } from './components/QuarterConfig';
 import { CourseSearch } from './components/CourseSearch';
 import { DegreeRequirementsPanel } from './components/DegreeRequirementsPanel';
 import { FLMBEPanel } from './components/FLMBEPanel';
@@ -34,6 +35,7 @@ const AppContent: React.FC = () => {
     isLoading,
     addCourseToQuarter,
     removeCourseFromQuarter,
+    deleteQuarter,
     selectFoundationCourse,
     selectFLMBECourse,
     toggleConcentration,
@@ -67,22 +69,29 @@ const AppContent: React.FC = () => {
           <Grid>
             {/* Left Column - Quarters */}
             <Grid.Col span={6}>
-              <Paper p="md" withBorder style={{ backgroundColor: '#f8f9fa' }}>
-                <Title order={3} mb="md">Quarterly Schedule</Title>
-                <ScrollArea>
-                  <Stack gap="md">
-                    {quarters.slice(0, 8).map((quarter) => (
-                      <QuarterColumn
-                        key={quarter.id}
-                        quarter={quarter}
-                        onAddCourse={(course) => addCourseToQuarter(quarter.id, course)}
-                        onRemoveCourse={(courseCode) => removeCourseFromQuarter(quarter.id, courseCode)}
-                        onDropCourse={(course) => addCourseToQuarter(quarter.id, course)}
-                      />
-                    ))}
-                  </Stack>
-                </ScrollArea>
-              </Paper>
+              <Stack gap="md">
+                {/* Quarter Configuration */}
+                <QuarterConfig />
+                
+                {/* Quarterly Schedule */}
+                <Paper p="md" withBorder style={{ backgroundColor: '#f8f9fa' }}>
+                  <Title order={3} mb="md">Quarterly Schedule</Title>
+                  <ScrollArea>
+                    <Stack gap="md">
+                      {quarters.map((quarter) => (
+                        <QuarterColumn
+                          key={quarter.id}
+                          quarter={quarter}
+                          onAddCourse={(course) => addCourseToQuarter(quarter.id, course)}
+                          onRemoveCourse={(courseCode) => removeCourseFromQuarter(quarter.id, courseCode)}
+                          onDropCourse={(course) => addCourseToQuarter(quarter.id, course)}
+                          onDeleteQuarter={deleteQuarter}
+                        />
+                      ))}
+                    </Stack>
+                  </ScrollArea>
+                </Paper>
+              </Stack>
             </Grid.Col>
 
             {/* Right Column - Requirements */}

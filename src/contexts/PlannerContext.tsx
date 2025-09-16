@@ -37,6 +37,11 @@ interface PlannerContextType {
   toggleConcentration: (name: string) => void;
   addConcentrationCourse: (concentrationName: string, requirementName: string, courseCode: string) => void;
   
+  // Quarter management actions
+  addQuarter: () => void;
+  deleteQuarter: (quarterId: string) => void;
+  resetQuarters: (startYear: number, startSeason: 'Autumn' | 'Winter' | 'Spring' | 'Summer') => void;
+  
   // Course categorization helpers
   foundationCourses: Set<string>;
   flmbeCourses: Set<string>;
@@ -320,6 +325,45 @@ export const PlannerProvider: React.FC<PlannerProviderProps> = ({ children }) =>
     }
   };
 
+  // Quarter management functions
+  const addQuarter = () => {
+    setQuarters(prev => {
+      if (prev.length === 0) return prev;
+      
+      const lastQuarter = prev[prev.length - 1];
+      const seasons: Array<'Autumn' | 'Winter' | 'Spring' | 'Summer'> = ['Autumn', 'Winter', 'Spring', 'Summer'];
+      const currentSeasonIndex = seasons.indexOf(lastQuarter.season);
+      
+      let nextSeason: 'Autumn' | 'Winter' | 'Spring' | 'Summer';
+      let nextYear = lastQuarter.year;
+      
+      if (currentSeasonIndex === seasons.length - 1) {
+        nextSeason = seasons[0];
+        nextYear += 1;
+      } else {
+        nextSeason = seasons[currentSeasonIndex + 1];
+      }
+      
+      const newQuarter: Quarter = {
+        id: `${nextYear}-${nextSeason}`,
+        name: `${nextSeason} ${nextYear}`,
+        year: nextYear,
+        season: nextSeason,
+        courses: []
+      };
+      
+      return [...prev, newQuarter];
+    });
+  };
+
+  const deleteQuarter = (quarterId: string) => {
+    setQuarters(prev => prev.filter(quarter => quarter.id !== quarterId));
+  };
+
+  const resetQuarters = (startYear: number, startSeason: 'Autumn' | 'Winter' | 'Spring' | 'Summer') => {
+    setQuarters(createDefaultQuarters(startYear, startSeason));
+  };
+
   const contextValue: PlannerContextType = {
     // Data
     quarters,
@@ -343,6 +387,11 @@ export const PlannerProvider: React.FC<PlannerProviderProps> = ({ children }) =>
     selectFLMBECourse,
     toggleConcentration,
     addConcentrationCourse,
+    
+    // Quarter management actions
+    addQuarter,
+    deleteQuarter,
+    resetQuarters,
     
     // Helpers
     foundationCourses,

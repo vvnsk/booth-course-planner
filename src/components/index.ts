@@ -1,5 +1,6 @@
 export { CourseCard } from './CourseCard';
 export { QuarterColumn } from './QuarterColumn';
+export { QuarterConfig } from './QuarterConfig';
 export { CourseSearch } from './CourseSearch';
 export { DegreeRequirementsPanel } from './DegreeRequirementsPanel';
 export { FLMBEPanel } from './FLMBEPanel';

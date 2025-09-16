@@ -184,22 +184,37 @@ export const getAllCoursesFromQuarters = (quarters: Quarter[]): Course[] => {
   return quarters.flatMap(quarter => quarter.courses);
 };
 
-export const createDefaultQuarters = (): Quarter[] => {
-  const currentYear = new Date().getFullYear();
+export const createDefaultQuarters = (
+  startYear?: number,
+  startSeason?: 'Autumn' | 'Winter' | 'Spring' | 'Summer'
+): Quarter[] => {
+  const currentYear = startYear || new Date().getFullYear();
+  const currentSeason = startSeason || 'Autumn';
   const quarters: Quarter[] = [];
   
-  // Create 8 quarters (2 years)
-  for (let year = 0; year < 2; year++) {
-    const seasons: Array<'Autumn' | 'Winter' | 'Spring' | 'Summer'> = ['Autumn', 'Winter', 'Spring', 'Summer'];
-    seasons.forEach((season, index) => {
-      quarters.push({
-        id: `${currentYear + year}-${season}`,
-        name: `${season} ${currentYear + year}`,
-        year: currentYear + year,
-        season,
-        courses: []
-      });
+  const seasons: Array<'Autumn' | 'Winter' | 'Spring' | 'Summer'> = ['Autumn', 'Winter', 'Spring', 'Summer'];
+  const startSeasonIndex = seasons.indexOf(currentSeason);
+  
+  // Create 8 quarters (2 years) starting from the specified season and year
+  let year = currentYear;
+  let seasonIndex = startSeasonIndex;
+  
+  for (let i = 0; i < 8; i++) {
+    const season = seasons[seasonIndex];
+    quarters.push({
+      id: `${year}-${season}`,
+      name: `${season} ${year}`,
+      year,
+      season,
+      courses: []
     });
+    
+    // Move to next season
+    seasonIndex++;
+    if (seasonIndex >= seasons.length) {
+      seasonIndex = 0;
+      year++;
+    }
   }
   
   return quarters;
