@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { Paper, Text, Stack, Group, Progress, Badge, SimpleGrid, Accordion, Tooltip, ActionIcon, Collapse } from '@mantine/core';
-import { IconCheck, IconTarget, IconCircle, IconCircleCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import { IconTarget, IconCircle, IconCircleCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { usePlanner } from '../contexts/PlannerContext';
 import type { Concentration, ConcentrationRequirement } from '../types/index';
 
 interface ConcentrationRequirementBoxProps {
   requirement: ConcentrationRequirement;
-  concentrationName: string;
 }
 
 const ConcentrationRequirementBox: React.FC<ConcentrationRequirementBoxProps> = ({
   requirement,
-  concentrationName
 }) => {
-  const { addConcentrationCourse } = usePlanner();
   const progressPercent = Math.min((requirement.unitsCompleted / requirement.minUnits) * 100, 100);
   const isCompleted = requirement.unitsCompleted >= requirement.minUnits;
   
@@ -162,7 +159,6 @@ const ConcentrationCard: React.FC<ConcentrationCardProps> = ({
               <ConcentrationRequirementBox
                 key={idx}
                 requirement={requirement}
-                concentrationName={concentration.name}
               />
             ))}
           </Stack>

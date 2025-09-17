@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Paper, Text, Stack, Group, Progress, Tooltip, ActionIcon, Collapse } from '@mantine/core';
-import { IconCheck, IconCircle, IconCircleCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import { IconCircle, IconCircleCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { usePlanner } from '../contexts/PlannerContext';
 import type { FoundationRequirement } from '../types/index';
 
@@ -9,9 +9,6 @@ interface RequirementBoxProps {
 }
 
 const RequirementBox: React.FC<RequirementBoxProps> = ({ requirement }) => {
-  const { selectFoundationCourse } = usePlanner();
-  const allEligibleCourses = [...requirement.basicCourses, ...requirement.approvedSubstitutes];
-  
   const tooltipContent = (
     <Stack gap="xs" style={{ maxWidth: 300 }}>
       <Text size="sm" fw={500}>{requirement.area}</Text>

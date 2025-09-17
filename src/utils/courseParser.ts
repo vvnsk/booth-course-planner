@@ -1,12 +1,12 @@
 import type { Course } from '../types/index';
 
 // Function to parse CSV data
-const parseCSV = (csvText: string): any[] => {
+const parseCSV = (csvText: string): Record<string, string>[] => {
   const lines = csvText.split('\n');
   const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
   
   return lines.slice(1).filter(line => line.trim()).map(line => {
-    const values = [];
+    const values: string[] = [];
     let current = '';
     let inQuotes = false;
     
@@ -23,7 +23,7 @@ const parseCSV = (csvText: string): any[] => {
     }
     values.push(current.trim());
     
-    const obj: any = {};
+    const obj: Record<string, string> = {};
     headers.forEach((header, index) => {
       obj[header] = values[index] || '';
     });
@@ -83,7 +83,7 @@ export const parseBoothCourses = async (): Promise<Course[]> => {
     
     const boothCoursesData = await coursesResponse.json();
     
-    return boothCoursesData.map((courseData: any) => {
+    return boothCoursesData.map((courseData: Record<string, any>) => {
       const courseCode = courseData.Course;
       // Extract just the numeric part for matching with evaluation data
       const numericCode = courseCode.replace('BUSN ', '');

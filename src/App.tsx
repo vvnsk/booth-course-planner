@@ -40,17 +40,11 @@ const AppContent: React.FC = () => {
     quarters,
     foundationRequirements,
     flmbeRequirements,
-    concentrations,
-    selectedConcentrations,
     allSelectedCourses,
     isLoading,
     addCourseToQuarter,
     removeCourseFromQuarter,
     deleteQuarter,
-    selectFoundationCourse,
-    selectFLMBECourse,
-    toggleConcentration,
-    addConcentrationCourse,
     exportSchedule,
     importSchedule
   } = usePlanner();
@@ -99,7 +93,6 @@ const AppContent: React.FC = () => {
                       <QuarterColumn
                         key={quarter.id}
                         quarter={quarter}
-                        onAddCourse={(course) => addCourseToQuarter(quarter.id, course)}
                         onRemoveCourse={(courseCode) => removeCourseFromQuarter(quarter.id, courseCode)}
                         onDropCourse={(course) => addCourseToQuarter(quarter.id, course)}
                         onDeleteQuarter={deleteQuarter}

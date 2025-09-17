@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
-import type { Course, Quarter, FoundationRequirement, FLMBEArea, Concentration, ExportablePlannerData } from '../types';
+import React, { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react';
+import type { Course, Quarter, FoundationRequirement, FLMBEArea, Concentration } from '../types';
 import { parseBoothCourses } from '../utils/courseParser';
 import {
   initializeFoundationRequirements,

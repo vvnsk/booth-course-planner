@@ -142,7 +142,6 @@ export interface CourseCardProps {
 
 export interface QuarterColumnProps {
   quarter: Quarter;
-  onAddCourse: (course: Course) => void;
   onRemoveCourse: (courseCode: string) => void;
   onDropCourse: (course: Course) => void;
   onDeleteQuarter?: (quarterId: string) => void;

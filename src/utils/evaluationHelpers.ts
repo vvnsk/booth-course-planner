@@ -6,7 +6,6 @@ let cacheLoadPromise: Promise<CourseEvaluation[]> | null = null;
 
 export const parseCourseEvaluationCSV = (csvText: string): CourseEvaluation[] => {
   const lines = csvText.split('\n');
-  const header = lines[0];
   const data = lines.slice(1);
   
   return data
@@ -104,7 +103,6 @@ export const createCourseEvaluationSummary = (
   courseEvaluations.forEach(evaluation => {
     const professorKey = `${evaluation.firstName} ${evaluation.lastName}`;
     const schedule = extractScheduleCode(evaluation.courseName);
-    const offeringKey = `${professorKey}-${schedule}-${evaluation.term}`;
     
     if (!professorMap.has(professorKey)) {
       professorMap.set(professorKey, []);

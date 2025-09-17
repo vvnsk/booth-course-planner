@@ -7,7 +7,6 @@ import type { QuarterColumnProps } from '../types/index';
 
 export const QuarterColumn: React.FC<QuarterColumnProps> = ({
   quarter,
-  onAddCourse,
   onRemoveCourse,
   onDropCourse,
   onDeleteQuarter
