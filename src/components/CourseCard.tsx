@@ -278,37 +278,41 @@ export const CourseCard: React.FC<CourseCardProps> = ({
       >
         <Stack gap="md">
           <div>
-            <Title order={4} size="h5" c="blue">
-              {course.title}
-            </Title>
+            <Group justify="space-between" align="flex-start" mb="xs">
+              <div style={{ flex: 1 }}>
+                <Title order={4} size="h5" c="blue" mb="xs">
+                  {course.title}
+                </Title>
+                {course.units && (
+                  <Group gap="xs" mb="xs">
+                    <Text size="sm" fw={500}>Units:</Text>
+                    <Badge variant="light" color="gray">
+                      {course.units}
+                    </Badge>
+                  </Group>
+                )}
+              </div>
+              <Group gap="md" align="flex-start">
+                {course.quartersOffered && course.quartersOffered.length > 0 && (
+                  <div>
+                    <Text size="sm" fw={500} mb={4}>Quarters Offered:</Text>
+                    <Group gap="xs">
+                      {getQuarterBadges(course.quartersOffered).map((quarter, index) => (
+                        <Badge key={index} color={getQuarterColor(quarter)} size="sm">
+                          {quarter}
+                        </Badge>
+                      ))}
+                    </Group>
+                    <Text size="xs" c="dimmed" mt={4}>
+                      Based on historical data: {course.quartersOffered.join(', ')}
+                    </Text>
+                  </div>
+                )}
+              </Group>
+            </Group>
           </div>
           
           <Divider />
-          
-          {course.units && (
-            <Group>
-              <Text fw={500}>Units:</Text>
-              <Badge variant="light" color="gray">
-                {course.units}
-              </Badge>
-            </Group>
-          )}
-          
-          {course.quartersOffered && course.quartersOffered.length > 0 && (
-            <div>
-              <Text fw={500} mb="xs">Quarters Offered:</Text>
-              <Group gap="xs">
-                {getQuarterBadges(course.quartersOffered).map((quarter, index) => (
-                  <Badge key={index} color={getQuarterColor(quarter)}>
-                    {quarter}
-                  </Badge>
-                ))}
-              </Group>
-              <Text size="xs" c="dimmed" mt="xs">
-                Based on historical data: {course.quartersOffered.join(', ')}
-              </Text>
-            </div>
-          )}
           
           {course.prerequisites && course.prerequisites.length > 0 && (
             <div>
@@ -329,7 +333,6 @@ export const CourseCard: React.FC<CourseCardProps> = ({
           )}
 
           {/* Course Evaluation Section */}
-          <Divider />
           <div>
             <Title order={5} mb="md">Course Evaluations</Title>
             
@@ -384,7 +387,17 @@ export const CourseCard: React.FC<CourseCardProps> = ({
                           </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
-                          {evaluationData.professors.map((professor, index) => (
+                          {evaluationData.professors
+                            .sort((a, b) => {
+                              // Sort by quarter (latest first)
+                              const parseQuarter = (quarter: string) => {
+                                const [season, year] = quarter.split(' ');
+                                const seasonOrder = { 'Spring': 3, 'Winter': 2, 'Autumn': 1, 'Summer': 4 };
+                                return parseInt(year) * 10 + (seasonOrder[season as keyof typeof seasonOrder] || 0);
+                              };
+                              return parseQuarter(b.quarter) - parseQuarter(a.quarter);
+                            })
+                            .map((professor, index) => (
                             <Table.Tr key={index}>
                               <Table.Td>
                                 <Text size="sm" fw={500}>
